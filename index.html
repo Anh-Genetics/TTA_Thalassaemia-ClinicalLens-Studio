@@ -7894,11 +7894,54 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
     // =========================================================================
     // 4. ZERO-TRUST AUTHENTICATION, LOGOUT & PARENT PORTAL ISOLATION
     // =========================================================================
+    function normalizeAccessExpiresAt(value) {
+      if (value === null || value === undefined) return '';
+      const raw = String(value).trim();
+      if (!raw) return '';
+      if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+      const asDate = new Date(raw);
+      if (!Number.isNaN(asDate.getTime())) {
+        return asDate.toISOString().slice(0, 10);
+      }
+      return '';
+    }
+
     function computeRemainingDays(expDateStr) {
-      const now = new Date('2026-11-09T09:00:00');
-      const exp = new Date(expDateStr + 'T23:59:59');
+      const normalizedDate = normalizeAccessExpiresAt(expDateStr);
+      if (!normalizedDate) return 0;
+      const now = new Date();
+      const exp = new Date(normalizedDate + 'T23:59:59');
+      if (Number.isNaN(exp.getTime())) return 0;
       const diffMs = exp.getTime() - now.getTime();
       return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    }
+
+    function updateUserLoginStamp(user) {
+      if (!user || !user.Email) return;
+      const loginStamp = new Date().toISOString();
+      user.Last_Login = loginStamp;
+      user.Access_Expires_At = normalizeAccessExpiresAt(user.Access_Expires_At) || user.Access_Expires_At || '1970-01-01';
+      const idx = ALLOWED_USERS_DB.findIndex(u => u.Email.toLowerCase() === user.Email.toLowerCase());
+      if (idx >= 0) {
+        ALLOWED_USERS_DB[idx] = { ...ALLOWED_USERS_DB[idx], ...user };
+      } else {
+        ALLOWED_USERS_DB.push(user);
+      }
+      try {
+        localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(ALLOWED_USERS_DB));
+      } catch (e) {}
+      const apiUrl = (currentGasApiUrl || '').trim();
+      if (apiUrl && apiUrl.startsWith('http')) {
+        fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'upsert_user',
+            user: { ...user, Access_Expires_At: normalizeAccessExpiresAt(user.Access_Expires_At) || user.Access_Expires_At || '1970-01-01' },
+            actorEmail: currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com'
+          })
+        }).catch(() => {});
+      }
     }
 
     function syncDatabaseLinks(newUrl) {
@@ -7937,13 +7980,19 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       // If GAS WebApp Endpoint is configured
       const apiUrl = (currentGasApiUrl || '').trim();
       if (apiUrl && apiUrl.startsWith('http')) {
-        const payload = deleteEmail
-          ? { action: 'delete_user', email: deleteEmail, actorEmail: currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com' }
-          : { action: 'upsert_user', user: syncCloudObj, actorEmail: currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com' };
+        if (deleteEmail) {
+          fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'delete_user', email: deleteEmail, actorEmail: currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com' })
+          }).catch(() => {});
+          return;
+        }
+        if (!syncCloudObj) return;
         fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({ action: 'upsert_user', user: syncCloudObj, actorEmail: currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com' })
         }).catch(() => {});
       }
     }
@@ -8128,7 +8177,8 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       }
 
       user.Last_Login = new Date().toISOString();
-      saveUsersToDatabase(user);
+      user.Access_Expires_At = normalizeAccessExpiresAt(user.Access_Expires_At) || user.Access_Expires_At;
+      updateUserLoginStamp(user);
       currentUser = user;
       currentScope = user.Data_Scope;
       applyUserSessionToUI();
