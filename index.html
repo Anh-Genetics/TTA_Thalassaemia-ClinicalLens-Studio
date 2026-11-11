@@ -7901,7 +7901,10 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
       const asDate = new Date(raw);
       if (!Number.isNaN(asDate.getTime())) {
-        return asDate.toISOString().slice(0, 10);
+        const y = asDate.getFullYear();
+        const m = String(asDate.getMonth() + 1).padStart(2, '0');
+        const d = String(asDate.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
       }
       return '';
     }
@@ -7936,8 +7939,9 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({
-            action: 'upsert_user',
-            user: { ...user, Access_Expires_At: normalizeAccessExpiresAt(user.Access_Expires_At) || user.Access_Expires_At || '1970-01-01' },
+            action: 'update_last_login',
+            email: user.Email,
+            last_login: loginStamp,
             actorEmail: currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com'
           })
         }).catch(() => {});
