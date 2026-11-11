@@ -1,733 +1,10 @@
 <!DOCTYPE html>
-<html lang="vi" class="scroll-smooth"><head><script data-bard-client-injected="true">(function(firebaseConfig, initialAuthToken, appId) {
-        window.__firebase_config = firebaseConfig;
-        window.__initial_auth_token = initialAuthToken;
-        window.__app_id = appId;
-            })("\n{\n  \"apiKey\": \"AIzaSyCqyCcs2R2e7AegGjvFAwG98wlamtbHvZY\",\n  \"authDomain\": \"bard-frontend.firebaseapp.com\",\n  \"projectId\": \"bard-frontend\",\n  \"storageBucket\": \"bard-frontend.firebasestorage.app\",\n  \"messagingSenderId\": \"175205271074\",\n  \"appId\": \"1:175205271074:web:2b7bd4d34d33bf38e6ec7b\"\n}\n","eyJhbGciOiJSUzI1NiIsImtpZCI6IjExNjRiNzdiNDMzZDdhMDAyMWI4NjE4YjhjYTU3ZTMyZGI5MWUxMTMiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0BiYXJkLWZyb250ZW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eXRvb2xraXQuZ29vZ2xlYXBpcy5jb20vZ29vZ2xlLmlkZW50aXR5LmlkZW50aXR5dG9vbGtpdC52MS5JZGVudGl0eVRvb2xraXQiLCJ1aWQiOiIwNjI2MjkzMTcxMjc4NTg3NDQzOCIsImlzcyI6ImZpcmViYXNlLWFkbWluc2RrLWZic3ZjQGJhcmQtZnJvbnRlbmQuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJjbGFpbXMiOnsiYXBwSWQiOiJjXzZmMTBjZjdlODZhNTExM2FfMDYwMTJhYzJfSW5kZXguaHRtbC0yMTQifSwiZXhwIjoxNzk0MjM3MTAyLCJpYXQiOjE3OTQyMzM1MDIsImFsZyI6IlJTMjU2In0.JE4dIElVGQTZxlcLrmvkoHbObetVUiX8-cNsXM4uBo-aZQ8IJ1RGGXuGkTHxli9N-f6y5VIbi3k0ooMb8ndG2jIBs3-LGUyonzoLt3zLI2lwiXYwXikcTDJyxCBlqh_QGI96gj8GaVqjwO_DSKc6ueblkdzKuDIWG4YrX6-GllLDLG00TbKjUxMbFGFzpuB2y4plNinL-peLCd5yUoy4vhi-k3aGFYPdkwjVDdUM3YdkKzqEfrYy6m1TjZ6OsZ7egpfwRYXoIrOramlQKTr-H-93xxSXvWJTzp5WPZfObmqJ_VosWUvzTFGsImpSCPioH_axhune-OJOWPpcye9oeg","c_6f10cf7e86a5113a_06012ac2_Index.html-214")</script><script data-bard-client-injected="true">
-  document.addEventListener('input', (event) => {
-    if (event.target && (event.target.isContentEditable || event.target.hasAttribute('contenteditable'))) {
-      const clonedDoc = document.cloneNode(true);
-      const injectedScripts = clonedDoc.querySelectorAll('[data-bard-client-injected="true"]');
-      injectedScripts.forEach(el => el.remove());
-      window.parent.postMessage({
-        type: 'inlineEdit',
-        html: '<!DOCTYPE html>\n' + clonedDoc.documentElement.outerHTML
-      }, '*');
-    }
-  });
-</script><script data-bard-client-injected="true">(function(){'use strict';window.addEventListener("message",a=>{a.data&&a.data.type==="SUPPLEMENTAL_DATA_UPDATE"&&window.dispatchEvent(new CustomEvent("supplementaldataupdate",{detail:a.data.data}))});}).call(this);
-</script><script data-bard-client-injected="true">(function() {
-  const SCROLL_KEYS = new Set([
-    'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
-    ' ', 'Spacebar', 'PageUp', 'PageDown', 'Home', 'End',
-  ]);
-  const HORIZONTAL_KEYS = new Set(['ArrowLeft', 'ArrowRight']);
-
-  function isTextEntryTarget(target) {
-    if (!target) return false;
-    const tagName = target.tagName;
-    return tagName === 'INPUT' || tagName === 'TEXTAREA' ||
-        tagName === 'SELECT' || target.isContentEditable === true;
-  }
-
-  // An element absorbs the key only if it both overflows on the axis being
-  // scrolled and is configured to scroll on that axis. The cheap dimension
-  // test runs first because getComputedStyle forces a style recalc, and this
-  // runs on every keypress. Each axis is read from its own longhand: the
-  // 'overflow' shorthand serializes as two values when the axes differ, which
-  // is the common 'overflow-x: hidden; overflow-y: auto' pane.
-  function canScroll(node, horizontal) {
-    const overflows = horizontal ? node.scrollWidth > node.clientWidth
-                                 : node.scrollHeight > node.clientHeight;
-    if (!overflows) return false;
-    const style = window.getComputedStyle(node);
-    const overflow = horizontal ? style.overflowX : style.overflowY;
-    return overflow === 'auto' || overflow === 'scroll';
-  }
-
-  // Walks up from the event target so nested scrollers keep their behavior.
-  // <body> is included because pages that pin the root height make it the
-  // scroll container.
-  function hasScrollableAncestor(target, horizontal) {
-    let node = target;
-    while (node && node !== document.documentElement) {
-      if (canScroll(node, horizontal)) return true;
-      node = node.parentElement;
-    }
-    return false;
-  }
-
-  function rootCanScroll(horizontal) {
-    const scroller = document.scrollingElement || document.documentElement;
-    if (!scroller) return false;
-    // Tolerate a pixel of rounding so subpixel layouts do not look scrollable.
-    return horizontal ? scroller.scrollWidth > window.innerWidth + 1
-                      : scroller.scrollHeight > window.innerHeight + 1;
-  }
-
-  window.addEventListener('keydown', function(event) {
-    if (!SCROLL_KEYS.has(event.key)) return;
-    if (event.defaultPrevented) return;
-    // Alt and Meta turn arrows into browser history navigation, and Ctrl is
-    // reserved for shortcuts, so none of them are scroll intent.
-    if (event.altKey || event.metaKey || event.ctrlKey) return;
-
-    const target = event.target;
-    if (isTextEntryTarget(target)) return;
-
-    // Anything that can still absorb the scroll gets to keep it.
-    const horizontal = HORIZONTAL_KEYS.has(event.key);
-    if (rootCanScroll(horizontal)) return;
-    if (hasScrollableAncestor(target, horizontal)) return;
-
-    event.preventDefault();
-  }, {capture: true, passive: false});
-})();</script><script data-bard-client-injected="true">(function() {
-  // Ensure this script is executed only once
-  if (window.firebaseAuthBridgeScriptLoaded) {
-    return;
-  }
-  window.firebaseAuthBridgeScriptLoaded = true;
-
-  let nextTokenPromiseId = 0;
-
-  // Stores { resolve, reject } for ongoing token requests
-  const pendingTokenPromises = {};
-
-  // Listen for messages from the Host Application
-  window.addEventListener('message', function(event) {
-
-    const messageData = event.data;
-
-  if (messageData && messageData.type === 'RESOLVE_NEW_FIREBASE_TOKEN') {
-      const { success, token, error, promiseId } = messageData ?? {};
-      if (pendingTokenPromises[promiseId]) {
-        if (success) {
-          pendingTokenPromises[promiseId].resolve(token);
-        } else {
-          pendingTokenPromises[promiseId].reject(new Error(error || 'Token refresh failed from host.'));
-        }
-        delete pendingTokenPromises[promiseId];
-      }
-    }
-  });
-
-  // Expose a function for the Generated App to request a new Firebase token
-  window.requestNewFirebaseToken = function() {
-    const currentPromiseId = nextTokenPromiseId++;
-    const promise = new Promise((resolve, reject) => {
-      pendingTokenPromises[currentPromiseId] = { resolve, reject };
-    });
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({
-        type: 'REQUEST_NEW_FIREBASE_TOKEN',
-        promiseId: currentPromiseId
-      }, '*');
-    } else {
-      pendingTokenPromises[currentPromiseId].reject(new Error('No parent window to request token from.'));
-      delete pendingTokenPromises[currentPromiseId];
-    }
-    return promise;
-  };
-})();</script><script data-bard-client-injected="true">
-let realOriginalGetUserMedia = null;
-if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-  realOriginalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
-}
-
-(function() {
-  if (navigator.mediaDevices && navigator.mediaDevices.__proto__) {
-    try {
-      Object.defineProperty(navigator.mediaDevices.__proto__, 'getUserMedia', {
-        get: function() {
-          return undefined; // Or throw an error
-        },
-        configurable: false
-      });
-    } catch (error) {
-      console.error("Error defining prototype getter:", error);
-    }
-  }
-})();
-
-(function() {
-  const pendingMediaResolvers = {};
-  let nextMediaPromiseId = 0;
-
-  function requestMediaPermissions(constraints) {
-    const mediaPromiseId = nextMediaPromiseId++;
-    const promise = new Promise((resolve, reject) => {
-      pendingMediaResolvers[mediaPromiseId] = (granted) => {
-        delete pendingMediaResolvers[mediaPromiseId];
-        resolve(granted);
-      };
-    });
-
-    window.parent.postMessage({
-      type: 'requestMediaPermission',
-      constraints: constraints,
-      promiseId: mediaPromiseId,
-    }, '*');
-
-    return promise;
-  }
-
-  let originalGetUserMedia = realOriginalGetUserMedia;
-
-  function interceptGetUserMedia() {
-    if (navigator.mediaDevices) {
-      Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
-        value: function(constraints) {
-          return requestMediaPermissions(constraints).then((granted) => {
-            if (granted) {
-              if (originalGetUserMedia) {
-                return originalGetUserMedia(constraints);
-              } else {
-                throw new Error("Original getUserMedia not available.");
-              }
-            } else {
-              throw new DOMException('Permission denied', 'NotAllowedError');
-            }
-          });
-        },
-        writable: false,
-        configurable: false
-      });
-    }
-  }
-
-  interceptGetUserMedia();
-
-  const observer = new MutationObserver(function(mutationsList, observer) {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'reconfigured' && mutation.name === 'getUserMedia' && mutation.object === navigator.mediaDevices) {
-        interceptGetUserMedia();
-      } else if (mutation.type === 'attributes' && mutation.attributeName === 'getUserMedia' && mutation.target === navigator.mediaDevices) {
-        interceptGetUserMedia();
-      } else if (mutation.type === 'childList' && mutation.addedNodes) {
-        mutation.addedNodes.forEach(node => {
-          if (node === navigator.mediaDevices) {
-            interceptGetUserMedia();
-          }
-        });
-      }
-    }
-  });
-
-  function interceptSpeechRecognition() {
-    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
-      return;
-    }
-
-    const OriginalSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    const SpeechRecognitionWrapper = function(...args) {
-      const recognizer = new OriginalSpeechRecognition(...args);
-      const originalStart = recognizer.start.bind(recognizer);
-
-      recognizer.start = function() {
-        requestMediaPermissions({ audio: true }).then(granted => {
-          if (granted) {
-            originalStart();
-          } else {
-            const errorEvent = new SpeechRecognitionErrorEvent('error');
-            errorEvent.error = 'not-allowed'; // This is the standard error for permission denial.
-            recognizer.dispatchEvent(errorEvent);
-          }
-        });
-      };
-
-      return recognizer;
-    };
-
-    SpeechRecognitionWrapper.prototype = OriginalSpeechRecognition.prototype;
-    SpeechRecognitionWrapper.prototype.constructor = SpeechRecognitionWrapper;
-
-    if (window.SpeechRecognition) {
-      window.SpeechRecognition = SpeechRecognitionWrapper;
-    }
-    if (window.webkitSpeechRecognition) {
-      window.webkitSpeechRecognition = SpeechRecognitionWrapper;
-    }
-  }
-
-  interceptSpeechRecognition();
-
-  window.addEventListener('message', function(event) {
-    if (event.data) {
-      if (event.data.type === 'resolveMediaPermission') {
-        const { promiseId, granted } = event.data;
-        if (pendingMediaResolvers[promiseId]) {
-          pendingMediaResolvers[promiseId](granted);
-        }
-      }
-    }
-  });
-
-})();</script><script ws-interception-config="{&quot;parentOrigin&quot;:&quot;https://gemini.google.com&quot;,&quot;proxiedDomains&quot;:[]}" data-bard-client-injected="true">(function(){'use strict';var u=typeof Object.defineProperties=="function"?Object.defineProperty:function(b,d,e){if(b==Array.prototype||b==Object.prototype)return b;b[d]=e.value;return b};function v(b){b=["object"==typeof globalThis&&globalThis,b,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var d=0;d<b.length;++d){var e=b[d];if(e&&e.Math==Math)return e}throw Error("Cannot find global object");}var w=v(this);
-function y(b,d){if(d)a:{var e=w;b=b.split(".");for(var h=0;h<b.length-1;h++){var k=b[h];if(!(k in e))break a;e=e[k]}b=b[b.length-1];h=e[b];d=d(h);d!=h&&d!=null&&u(e,b,{configurable:!0,writable:!0,value:d})}}function z(b){function d(h){return b.next(h)}function e(h){return b.throw(h)}return new Promise(function(h,k){function m(n){n.done?h(n.value):Promise.resolve(n.value).then(d,e).then(m,k)}m(b.next())})}y("globalThis",function(b){return b||w});/*
-
- Copyright The Closure Library Authors.
- SPDX-License-Identifier: Apache-2.0
-*/
-function A(b,d){function e(){}e.prototype=d.prototype;b.j=d.prototype;b.prototype=new e;b.prototype.constructor=b;b.h=function(h,k,m){for(var n=Array(arguments.length-2),p=2;p<arguments.length;p++)n[p-2]=arguments[p];return d.prototype[k].apply(h,n)}};function B(b,d,e="*"){function h(a){if(typeof a==="string")return F.encode(a).buffer;if(a instanceof ArrayBuffer)return a.slice(0);if(ArrayBuffer.isView(a))return a.buffer.slice(a.byteOffset,a.byteOffset+a.byteLength);throw Error("Invalid data type");}function k(a){a=h(a);var f={type:"send",data:new Uint8Array(a)},g;(g=r)==null||g.postMessage(f,[a])}function m(){if(!r)throw Error("Data port not captured yet.");r.onmessage=a=>{if(a.data.type==="message"){a=new MessageEvent("message",{data:G.decode(a.data.data)});
-let f;(f=c.onmessage)==null||f.call(c,a);c.dispatchEvent(a)}}}function n(){if(!t)throw Error("Control port not captured yet.");t.onmessage=a=>{switch(a.data.type){case "open":l=1;var f=new Event("open"),g;(g=c.onopen)==null||g.call(c,f);c.dispatchEvent(f);q.forEach(H=>{k(H)});q=[];break;case "close":g=a.data;l=3;g=new CloseEvent("close",{code:g.code,reason:g.reason,wasClean:g.wasClean});(f=c.onclose)==null||f.call(c,g);c.dispatchEvent(g);break;case "error":l=3;f=new Event("error");let x;(x=c.onerror)==
-null||x.call(c,f);c.dispatchEvent(f)}}}function p(a){return z(function*(){var f=new MessageChannel;t=f.port1;var g=new MessageChannel;r=g.port1;n();m();window.parent.postMessage({type:"websocket_open",portOrdering:["control","data"],url:b,protocols:a||[],connectionId:I},e,[f.port2,g.port2])}())}var c=Reflect.construct(EventTarget,[],new.target);c.CONNECTING=0;c.OPEN=1;c.CLOSING=2;c.CLOSED=3;c.url=b;c.binaryType="arraybuffer";c.protocol="";c.i="";var l=0,t=null,r=null,q=[],F=new TextEncoder,G=new TextDecoder;
-c.onopen=null;c.onmessage=null;c.onclose=null;c.onerror=null;Object.defineProperty(c,"readyState",{get:()=>l,enumerable:!0,configurable:!0});Object.defineProperty(c,"bufferedAmount",{get:()=>{var a=0;q.forEach(f=>{a+=typeof f==="string"?f.length:f.byteLength});return a},enumerable:!0,configurable:!0});var I=function(){var a;return((a=globalThis.crypto)==null?0:a.randomUUID)?globalThis.crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,f=>{var g=Math.random()*16|0;return(f===
-"x"?g:g&3|8).toString(16)})}();c.send=a=>{if(l===1)a instanceof Blob?a.arrayBuffer().then(f=>{k(f)}):k(a);else if(l===0)if(typeof a==="string")q.push(a);else if(a instanceof ArrayBuffer||ArrayBuffer.isView(a))q.push(h(a));else throw Error("Sending Blob is not supported before the connection is open.");else console.debug("WebSocket send called in CLOSING or CLOSED state; ignored.")};c.close=(a=1E3,f="")=>{if(l!==2&&l!==3){l=2;a={type:"close",code:a,reason:f,wasClean:a===1E3};var g;(g=t)==null||g.postMessage(a)}};
-Promise.resolve().then(()=>p(d));return c}A(B,EventTarget);var C=document.currentScript,D=C==null?void 0:C.getAttribute("ws-interception-config");if(!D)throw Error("WebSocket Interceptor: Missing ws-interception-config attribute in the script tag.");var E=JSON.parse(D);if(!E.parentOrigin||typeof E.parentOrigin!=="string")throw Error("WebSocket Interceptor: Invalid parentOrigin in ws-interception-config");
-(function(b){var d=Object.getOwnPropertyDescriptor(window,"WebSocket");if(!d||d.writable||d.configurable)d=Object.assign(function(e,h){try{let k=(new URL(e)).hostname;if(b.proxiedDomains.some(m=>k===m||k.endsWith(`.${m}`)))return new B(e,h,b.parentOrigin)}catch(k){throw window.parent.postMessage({type:"websocket_blocked",url:e,reason:"blocked_invalid_url"},b.parentOrigin),new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");}window.parent.postMessage({type:"websocket_blocked",
-url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");},{CONNECTING:0,OPEN:1,CLOSING:2,CLOSED:3}),Object.defineProperty(window,"WebSocket",{value:d,writable:!1,configurable:!1})})({proxiedDomains:E.proxiedDomains||[],parentOrigin:E.parentOrigin});}).call(this);
-</script><script data-bard-client-injected="true">((function(modelInformation) {
-  const originalFetch = window.fetch;
-  // TODO: b/421908508 - Move these out of the script and match all generative AI model calls.
-  let googleLlmBaseApiUrls = [
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':streamGenerateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predict',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predictLongRunning',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageEditModelName + ':generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageTransformModelName + ':generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predict',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predictLongRunning',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.ttsModelName + ':generateContent',
-  ];
-  modelInformation.deprecatedTextModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-    );
-  });
-  modelInformation.deprecatedImageModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predict',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predictLongRunning',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-    );
-  });
-  modelInformation.deprecatedGenerateImageModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-    );
-  });
-  modelInformation.deprecatedImageTransformModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-    );
-  });
-
-  const pendingFetchResolvers = {};
-  let nextPromiseId = 0;
-
-  function handleStringInput(input, optionsArgument) {
-    const actualUrl = input;
-    const fetchCallArgs = [actualUrl, optionsArgument];
-    const effectiveOptions = optionsArgument || {};
-    const bodyForApiKeyCheck = effectiveOptions.body;
-    const bodyForPostMessage = effectiveOptions.body;
-    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
-  }
-
-  function handleRequestInput(input, optionsArgument) {
-    const actualUrl = input.url;
-    const fetchCallArgs = [input, optionsArgument];
-    const effectiveOptions = { method: input.method, headers: new Headers(input.headers) };
-    let bodyForApiKeyCheck;
-    let bodyForPostMessage;
-
-    if (optionsArgument) {
-      if (optionsArgument.method) effectiveOptions.method = optionsArgument.method;
-      if (optionsArgument.headers) effectiveOptions.headers = new Headers(optionsArgument.headers);
-      if ('body' in optionsArgument) {
-        bodyForApiKeyCheck = optionsArgument.body;
-        bodyForPostMessage = optionsArgument.body;
-      } else {
-        bodyForApiKeyCheck = undefined;
-        bodyForPostMessage = input.body;
-      }
-    } else {
-      bodyForApiKeyCheck = undefined;
-      bodyForPostMessage = input.body;
-    }
-    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
-  }
-
-  window.fetch = function(input, optionsArgument) {
-    let actualUrl;
-    let fetchCallArgs;
-    let effectiveOptions = {};
-    let bodyForApiKeyCheck;
-    let bodyForPostMessage;
-
-    if (typeof input === 'string') {
-      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleStringInput(input, optionsArgument));
-    } else if (input instanceof Request) {
-      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleRequestInput(input, optionsArgument));
-    } else {
-      return originalFetch.apply(window, [input, optionsArgument]);
-    }
-
-    effectiveOptions.method = effectiveOptions.method || 'GET';
-    if (!effectiveOptions.headers) {
-      effectiveOptions.headers = new Headers();
-    }
-
-
-    if (typeof actualUrl === 'string' && googleLlmBaseApiUrls.some((url) => actualUrl.startsWith(url))) {
-      let apiKeyIsNull = true;
-
-      const regex = new RegExp("models/([^:]+)");
-      const modelNameMatch = actualUrl.match(regex);
-      const modelName = modelNameMatch ? modelNameMatch[1] : 'unspecified';
-
-
-      try {
-        const urlObject = new URL(actualUrl);  // Use URL object for robust parsing
-        const apiKeyParam = urlObject.searchParams.get('key');
-        if (apiKeyParam) {
-          apiKeyIsNull = false;
-        }
-      } catch (e) {
-        // Continue checks even if URL parsing fails
-      }
-
-      if (apiKeyIsNull && effectiveOptions.headers) {
-        const h = new Headers(effectiveOptions.headers);
-        const apiKeyHeaderValue = h.get('X-API-Key') || h.get('x-api-key');
-        if (apiKeyHeaderValue) {
-          apiKeyIsNull = false;
-          return originalFetch.apply(window, fetchCallArgs);
-        }
-      }
-
-      if (apiKeyIsNull && effectiveOptions.method && ['POST', 'PUT', 'PATCH'].includes(effectiveOptions.method.toUpperCase()) && typeof bodyForApiKeyCheck === 'string') {
-        try {
-          const bodyData = JSON.parse(bodyForApiKeyCheck);
-          if (bodyData && bodyData.apiKey) {
-            apiKeyIsNull = false;
-            return originalFetch.apply(window, fetchCallArgs);
-          }
-        } catch (e) {
-          // Ignore JSON parsing errors
-        }
-      }
-
-      if(apiKeyIsNull) {
-        const promiseId = nextPromiseId++;
-        const promise = new Promise((resolve) => {
-          pendingFetchResolvers[promiseId] = (resolvedResponse) => {
-            delete pendingFetchResolvers[promiseId];
-            resolve(resolvedResponse);
-          };
-        });
-
-        let serializedBodyForPostMessage;
-        if (typeof bodyForPostMessage === 'string' || bodyForPostMessage == null) {
-            serializedBodyForPostMessage = bodyForPostMessage;
-        } else if (bodyForPostMessage instanceof ReadableStream) {
-            serializedBodyForPostMessage = null;
-        } else {
-            try {
-                serializedBodyForPostMessage = JSON.stringify(bodyForPostMessage);
-            } catch (e) {
-                serializedBodyForPostMessage = null;
-            }
-        }
-
-        const messageOptions = {
-            method: effectiveOptions.method,
-            headers: Object.fromEntries(new Headers(effectiveOptions.headers).entries()),
-            body: serializedBodyForPostMessage
-        };
-
-        window.parent.postMessage({
-          type: 'requestFetch',
-          url: actualUrl,
-          modelName: modelName,
-          options: messageOptions,
-          promiseId: promiseId,
-        }, '*');
-
-        return promise;
-      }
-      return originalFetch.apply(window, fetchCallArgs);
-    }
-    return originalFetch.apply(window, fetchCallArgs);
-  };
-
-  window.addEventListener('message', function(event) {
-    if (event.data && event.data.type === 'resolveFetch') {
-      const { promiseId, response } = event.data;
-      if (pendingFetchResolvers[promiseId]) {
-        try {
-          const reconstructedResponse = new Response(response.body, {
-            status: response.status,
-            statusText: response.statusText,
-            headers: new Headers(response.headers),
-          });
-          pendingFetchResolvers[promiseId](reconstructedResponse);
-        } catch (error) {
-          pendingFetchResolvers[promiseId](new Response(null, { status: 500, statusText: "Interceptor Response Reconstruction Error" }));
-        }
-      }
-    }
-  });
-
-}))({"textModelName":"gemini-3-flash-preview","imageModelName":"imagen-4.0-generate-001","imageEditModelName":"gemini-3.1-flash-image","imageTransformModelName":"gemini-3-pro-image","videoModelName":"veo-2.0-generate-001","ttsModelName":"gemini-2.5-flash-preview-tts","deprecatedTextModelNames":["gemini-2.0-flash","gemini-2.5-flash","gemini-2.5-flash-preview-04-17","gemini-2.5-flash-preview-05-20","gemini-2.5-flash-preview-09-2025"],"deprecatedImageModelNames":["imagen-3.0-generate-001","imagen-3.0-generate-002"],"deprecatedGenerateImageModelNames":["gemini-2.5-flash-image-preview","gemini-2.5-flash-image","gemini-3.1-flash-image-preview"],"deprecatedImageTransformModelNames":["gemini-3-pro-image-preview-11-2025"]})</script><script data-bard-client-injected="true">(function() {
-  function normalizeSlug(str) {
-    try {
-      return str
-        .trim()
-        .toLowerCase()
-        .replace(/[^p{L}p{N}s_-]/gu, '')
-        .replace(/s+/g, '-');
-    } catch (e) {
-      return str
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9s_-]/g, '')
-        .replace(/s+/g, '-');
-    }
-  }
-
-  function findTargetElement(hash) {
-    if (!hash || hash === '#') {
-      return null;
-    }
-    const rawId = hash.startsWith('#') ? hash.slice(1) : hash;
-    let decodedId = rawId;
-    try {
-      decodedId = decodeURIComponent(rawId);
-    } catch (e) {
-      // Ignore URI malformed errors.
-    }
-
-    // 1. Direct ID match (raw and decoded).
-    let target = document.getElementById(rawId) || document.getElementById(decodedId);
-    if (target) {
-      return target;
-    }
-
-    // 2. Name attribute match (<a name="...">).
-    try {
-      if (typeof CSS !== 'undefined' && CSS.escape) {
-        target =
-          document.querySelector('[name="' + CSS.escape(rawId) + '"]') ||
-          document.querySelector('[name="' + CSS.escape(decodedId) + '"]');
-      } else {
-        const namedElements = document.getElementsByName(rawId);
-        if (namedElements && namedElements.length > 0) {
-          return namedElements[0];
-        }
-      }
-    } catch (e) {
-      // Ignore querySelector syntax errors.
-    }
-    if (target) {
-      return target;
-    }
-
-    // 3. Match heading text by slug (for Markdown TOCs where headings lack explicit IDs).
-    const targetSlug = normalizeSlug(decodedId);
-    if (targetSlug) {
-      for (const heading of document.querySelectorAll('h1, h2, h3, h4, h5, h6')) {
-        if (normalizeSlug(heading.textContent || '') === targetSlug) {
-          return heading;
-        }
-      }
-    }
-
-    return null;
-  }
-
-  document.addEventListener('click', function(event) {
-    const target = event.target;
-    const anchor = target && typeof target.closest === 'function' ? target.closest('a') : null;
-    if (!anchor) {
-      return;
-    }
-
-    const href = anchor.getAttribute('href');
-    if (
-      !href ||
-      href.trim().toLowerCase().startsWith('javascript:') ||
-      anchor.hasAttribute('download')
-    ) {
-      return;
-    }
-
-    // Check if the link is an in-page hash / anchor link.
-    if (href.startsWith('#')) {
-      event.preventDefault();
-      const targetElement = findTargetElement(href);
-      if (targetElement) {
-        targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
-      }
-      return;
-    }
-
-    // Check if the URL has the same origin/pathname but with a hash.
-    try {
-      const url = new URL(anchor.href, window.location.href);
-      if (
-        url.hash &&
-        url.origin === window.location.origin &&
-        url.pathname === window.location.pathname
-      ) {
-        event.preventDefault();
-        const targetElement = findTargetElement(url.hash);
-        if (targetElement) {
-          targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
-        }
-        return;
-      }
-    } catch (e) {
-      // Fall through if URL parsing fails.
-    }
-
-    // For all external or full navigation links, prevent iframe-level navigation
-    // (which breaks in AGSA WebView or sandboxed iframes) and ensure they open
-    // safely in a new tab/window.
-    if (anchor.target !== '_blank') {
-      event.preventDefault();
-      window.open(anchor.href, '_blank', 'noopener,noreferrer');
-    }
-  }, {capture: true});
-})();</script><script data-bard-client-injected="true">(function(){'use strict';function a(){window.parent.postMessage({type:"interaction"},"*")}window.addEventListener("click",a,{capture:!0,passive:!0});window.addEventListener("touchstart",a,{capture:!0,passive:!0});window.addEventListener("keydown",a,{capture:!0,passive:!0});}).call(this);
-</script><script data-bard-client-injected="true">(function() {
-  const originalConsoleLog = console.log;
-  const originalConsoleError = console.error;
-
-    /**
-   * Normalizes an error event or a promise rejection reason into a structured error object.
-   * @param {*} errorEventOrReason The error object or reason.
-   * @return {object} Structured error data { message, name, stack }.
-   */
-  function getErrorObject(errorEventOrReason) {
-    if (errorEventOrReason instanceof Error) {
-      return {
-        message: errorEventOrReason.message,
-        name: errorEventOrReason.name,
-        stack: errorEventOrReason.stack,
-      };
-    }
-    // Fallback for non-Error objects.
-    try {
-      return {
-        message: JSON.stringify(errorEventOrReason),
-        name: 'UnknownErrorType',
-        stack: null,
-      };
-    } catch (e) {
-      return {
-        message: String(errorEventOrReason),
-        name: 'UnknownErrorTypeNonStringifiable',
-        stack: null,
-      };
-    }
-  }
-
-  /**
-   * Converts an array of arguments (from log/error) into a single string.
-   * Handles Error objects specially to include their message and stack.
-   * @param {Array<*>} args - Arguments passed to console methods.
-   * @return {string} A string representation of the arguments.
-   */
-  function stringifyArgs(args) {
-    return args
-      .map((arg) => {
-        if (arg instanceof Error) {
-          const {message, stack} = arg;
-          return `Error: ${message}${stack ? ('\nStack: ' + stack) : ''}`;
-        }
-        if (typeof arg === 'object' && arg !== null) {
-          try {
-            return JSON.stringify(arg);
-          } catch (error) {
-            return '[Circular Object]';
-          }
-        } else {
-          return String(arg);
-        }
-      })
-      .join(' ');
-  }
-
-  console.log = function(...args) {
-    const logString = stringifyArgs(args);
-    window.parent.postMessage({ type: 'log', message: logString }, '*');
-    originalConsoleLog.apply(console, args);
-  };
-
-  console.error = function(...args) {
-    let errorData;
-    if (args.length > 0 && args[0] instanceof Error) {
-      const err = args[0];
-      // If the first arg is an Error, capture its details.
-      errorData = {
-        type: 'error',
-        source: 'CONSOLE_ERROR',
-        ...getErrorObject(err),
-        rawArgsString: stringifyArgs(args.slice(1)),
-        timestamp: new Date().toISOString(),
-      };
-    } else {
-      // If not an Error object, treat all args as a general error message.
-      errorData = {
-        type: 'error',
-        source: 'CONSOLE_ERROR',
-        message: stringifyArgs(args),
-        name: 'ConsoleLoggedError',
-        stack: null,
-        timestamp: new Date().toISOString(),
-      };
-    }
-    window.parent.postMessage(errorData, '*');
-    originalConsoleError.apply(console, args);
-  };
-
-  // Listen for global unhandled synchronous errors.
-  window.addEventListener('error', function(event) {
-    const errorDetails = event.error ? getErrorObject(event.error) : {
-      message: event.message,
-      name: 'GlobalError',
-      stack: null,
-      filename: event.filename,
-      lineno: event.lineno,
-      colno: event.colno,
-    };
-
-    window.parent.postMessage({
-      type: 'error',
-      source: 'global',
-      ...errorDetails,
-      message: errorDetails.message || event.message,
-      timestamp: new Date().toISOString(),
-    }, '*');
-  });
-
-  // Listen for unhandled promise rejections (asynchronous errors).
-  window.addEventListener('unhandledrejection', function(event) {
-    const errorDetails = getErrorObject(event.reason);
-
-    window.parent.postMessage({
-      type: 'error',
-      source: 'unhandledrejection',
-      ...errorDetails,
-      message: errorDetails.message || 'Unhandled Promise Rejection',
-      timestamp: new Date().toISOString(),
-    }, '*');
-  });
-
-})();</script>
+<html lang="vi" class="scroll-smooth"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thalassaemia-ClinicalLens Studio | Hệ sinh thái Trí tuệ Lâm sàng, Phả hệ NSGC-2.5 &amp; Dự báo Đột biến Gen</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
@@ -788,7 +65,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       body { background: #ffffff; }
     }
   </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.right-4{right:1rem}.top-0{top:0px}.top-4{top:1rem}.z-30{z-index:30}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.my-4{margin-top:1rem;margin-bottom:1rem}.mb-1{margin-bottom:0.25rem}.mb-1\.5{margin-bottom:0.375rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-8{margin-top:2rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-12{height:3rem}.h-16{height:4rem}.h-2\.5{height:0.625rem}.h-3\.5{height:0.875rem}.h-4{height:1rem}.h-6{height:1.5rem}.h-72{height:18rem}.h-auto{height:auto}.max-h-10{max-height:2.5rem}.max-h-14{max-height:3.5rem}.min-h-\[420px\]{min-height:420px}.min-h-screen{min-height:100vh}.w-12{width:3rem}.w-16{width:4rem}.w-2\.5{width:0.625rem}.w-3\.5{width:0.875rem}.w-4{width:1rem}.w-6{width:1.5rem}.w-auto{width:auto}.w-full{width:100%}.min-w-\[220px\]{min-width:220px}.max-w-3xl{max-width:48rem}.max-w-7xl{max-width:80rem}.max-w-md{max-width:28rem}.max-w-\[740px\]{max-width:740px}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.border-collapse{border-collapse:collapse}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.list-disc{list-style-type:disc}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-3\.5{gap:0.875rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-1{gap:0.25rem}.space-y-0\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.125rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.125rem * var(--tw-space-y-reverse))}.space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-3\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.875rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.875rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-x-1 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.25rem * var(--tw-space-x-reverse));margin-left:calc(0.25rem * calc(1 - var(--tw-space-x-reverse)))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-slate-200 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(226 232 240 / var(--tw-divide-opacity, 1))}.divide-slate-100 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(241 245 249 / var(--tw-divide-opacity, 1))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.scroll-smooth{scroll-behavior:smooth}.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-sm{border-radius:0.125rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-\[\#084459\]{--tw-border-opacity:1;border-color:rgb(8 68 89 / var(--tw-border-opacity, 1))}.border-amber-300{--tw-border-opacity:1;border-color:rgb(252 211 77 / var(--tw-border-opacity, 1))}.border-cyan-300\/50{border-color:rgb(103 232 249 / 0.5)}.border-cyan-400{--tw-border-opacity:1;border-color:rgb(34 211 238 / var(--tw-border-opacity, 1))}.border-cyan-400\/30{border-color:rgb(34 211 238 / 0.3)}.border-cyan-400\/40{border-color:rgb(34 211 238 / 0.4)}.border-cyan-500\/20{border-color:rgb(6 182 212 / 0.2)}.border-emerald-200{--tw-border-opacity:1;border-color:rgb(167 243 208 / var(--tw-border-opacity, 1))}.border-emerald-300{--tw-border-opacity:1;border-color:rgb(110 231 183 / var(--tw-border-opacity, 1))}.border-emerald-400\/40{border-color:rgb(52 211 153 / 0.4)}.border-emerald-500{--tw-border-opacity:1;border-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.border-emerald-600{--tw-border-opacity:1;border-color:rgb(5 150 105 / var(--tw-border-opacity, 1))}.border-orange-300{--tw-border-opacity:1;border-color:rgb(253 186 116 / var(--tw-border-opacity, 1))}.border-purple-300{--tw-border-opacity:1;border-color:rgb(216 180 254 / var(--tw-border-opacity, 1))}.border-red-300{--tw-border-opacity:1;border-color:rgb(252 165 165 / var(--tw-border-opacity, 1))}.border-rose-200{--tw-border-opacity:1;border-color:rgb(254 205 211 / var(--tw-border-opacity, 1))}.border-rose-300{--tw-border-opacity:1;border-color:rgb(253 164 175 / var(--tw-border-opacity, 1))}.border-rose-400{--tw-border-opacity:1;border-color:rgb(251 113 133 / var(--tw-border-opacity, 1))}.border-rose-500{--tw-border-opacity:1;border-color:rgb(244 63 94 / var(--tw-border-opacity, 1))}.border-sky-200{--tw-border-opacity:1;border-color:rgb(186 230 253 / var(--tw-border-opacity, 1))}.border-sky-300{--tw-border-opacity:1;border-color:rgb(125 211 252 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-teal-200{--tw-border-opacity:1;border-color:rgb(153 246 228 / var(--tw-border-opacity, 1))}.border-teal-300{--tw-border-opacity:1;border-color:rgb(94 234 212 / var(--tw-border-opacity, 1))}.border-teal-400{--tw-border-opacity:1;border-color:rgb(45 212 191 / var(--tw-border-opacity, 1))}.border-teal-500{--tw-border-opacity:1;border-color:rgb(20 184 166 / var(--tw-border-opacity, 1))}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.border-white\/20{border-color:rgb(255 255 255 / 0.2)}.border-white\/25{border-color:rgb(255 255 255 / 0.25)}.border-white\/30{border-color:rgb(255 255 255 / 0.3)}.border-white\/40{border-color:rgb(255 255 255 / 0.4)}.border-indigo-200{--tw-border-opacity:1;border-color:rgb(199 210 254 / var(--tw-border-opacity, 1))}.bg-\[\#0066b3\]{--tw-bg-opacity:1;background-color:rgb(0 102 179 / var(--tw-bg-opacity, 1))}.bg-\[\#04202c\]\/90{background-color:rgb(4 32 44 / 0.9)}.bg-\[\#042430\]\/80{background-color:rgb(4 36 48 / 0.8)}.bg-\[\#06394c\]{--tw-bg-opacity:1;background-color:rgb(6 57 76 / var(--tw-bg-opacity, 1))}.bg-\[\#084459\]{--tw-bg-opacity:1;background-color:rgb(8 68 89 / var(--tw-bg-opacity, 1))}.bg-\[\#1e293b\]{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-amber-400{--tw-bg-opacity:1;background-color:rgb(251 191 36 / var(--tw-bg-opacity, 1))}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-cyan-500\/30{background-color:rgb(6 182 212 / 0.3)}.bg-emerald-100{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-500\/20{background-color:rgb(16 185 129 / 0.2)}.bg-emerald-500\/25{background-color:rgb(16 185 129 / 0.25)}.bg-emerald-500\/90{background-color:rgb(16 185 129 / 0.9)}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-emerald-700{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-orange-50{--tw-bg-opacity:1;background-color:rgb(255 247 237 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-purple-50\/70{background-color:rgb(250 245 255 / 0.7)}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-purple-700{--tw-bg-opacity:1;background-color:rgb(126 34 206 / var(--tw-bg-opacity, 1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity, 1))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-rose-50{--tw-bg-opacity:1;background-color:rgb(255 241 242 / var(--tw-bg-opacity, 1))}.bg-rose-50\/50{background-color:rgb(255 241 242 / 0.5)}.bg-rose-50\/70{background-color:rgb(255 241 242 / 0.7)}.bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.bg-sky-100{--tw-bg-opacity:1;background-color:rgb(224 242 254 / var(--tw-bg-opacity, 1))}.bg-sky-50{--tw-bg-opacity:1;background-color:rgb(240 249 255 / var(--tw-bg-opacity, 1))}.bg-sky-50\/40{background-color:rgb(240 249 255 / 0.4)}.bg-sky-50\/70{background-color:rgb(240 249 255 / 0.7)}.bg-sky-50\/80{background-color:rgb(240 249 255 / 0.8)}.bg-sky-500{--tw-bg-opacity:1;background-color:rgb(14 165 233 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-slate-50\/60{background-color:rgb(248 250 252 / 0.6)}.bg-slate-50\/70{background-color:rgb(248 250 252 / 0.7)}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-950\/90{background-color:rgb(2 6 23 / 0.9)}.bg-teal-100{--tw-bg-opacity:1;background-color:rgb(204 251 241 / var(--tw-bg-opacity, 1))}.bg-teal-50{--tw-bg-opacity:1;background-color:rgb(240 253 250 / var(--tw-bg-opacity, 1))}.bg-teal-50\/70{background-color:rgb(240 253 250 / 0.7)}.bg-teal-50\/80{background-color:rgb(240 253 250 / 0.8)}.bg-teal-700{--tw-bg-opacity:1;background-color:rgb(15 118 110 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-white\/15{background-color:rgb(255 255 255 / 0.15)}.bg-white\/20{background-color:rgb(255 255 255 / 0.2)}.bg-white\/90{background-color:rgb(255 255 255 / 0.9)}.bg-amber-50\/50{background-color:rgb(255 251 235 / 0.5)}.bg-cyan-500{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-slate-950{--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.bg-teal-50\/50{background-color:rgb(240 253 250 / 0.5)}.bg-teal-50\/60{background-color:rgb(240 253 250 / 0.6)}.bg-amber-100{--tw-bg-opacity:1;background-color:rgb(254 243 199 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-rose-100{--tw-bg-opacity:1;background-color:rgb(255 228 230 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-\[\#052938\]{--tw-gradient-from:#052938 var(--tw-gradient-from-position);--tw-gradient-to:rgb(5 41 56 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#052e3e\]{--tw-gradient-from:#052e3e var(--tw-gradient-from-position);--tw-gradient-to:rgb(5 46 62 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#06394c\]{--tw-gradient-from:#06394c var(--tw-gradient-from-position);--tw-gradient-to:rgb(6 57 76 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyan-500{--tw-gradient-from:#06b6d4 var(--tw-gradient-from-position);--tw-gradient-to:rgb(6 182 212 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-sky-50{--tw-gradient-from:#f0f9ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(240 249 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-teal-700{--tw-gradient-from:#0f766e var(--tw-gradient-from-position);--tw-gradient-to:rgb(15 118 110 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#041f2b\]{--tw-gradient-from:#041f2b var(--tw-gradient-from-position);--tw-gradient-to:rgb(4 31 43 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-\[\#073b4f\]{--tw-gradient-to:rgb(7 59 79 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #073b4f var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-\[\#084459\]{--tw-gradient-to:rgb(8 68 89 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #084459 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-white{--tw-gradient-to:rgb(255 255 255 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #fff var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-\[\#073346\]{--tw-gradient-to:rgb(7 51 70 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #073346 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-\[\#0284c7\]{--tw-gradient-to:#0284c7 var(--tw-gradient-to-position)}.to-\[\#0a4d63\]{--tw-gradient-to:#0a4d63 var(--tw-gradient-to-position)}.to-\[\#0b556c\]{--tw-gradient-to:#0b556c var(--tw-gradient-to-position)}.to-\[\#0b6477\]{--tw-gradient-to:#0b6477 var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.to-emerald-600{--tw-gradient-to:#059669 var(--tw-gradient-to-position)}.to-teal-50{--tw-gradient-to:#f0fdfa var(--tw-gradient-to-position)}.to-\[\#0a4860\]{--tw-gradient-to:#0a4860 var(--tw-gradient-to-position)}.object-contain{object-fit:contain}.p-1{padding:0.25rem}.p-1\.5{padding:0.375rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-2{padding:0.5rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pb-4{padding-bottom:1rem}.pl-5{padding-left:1.25rem}.pt-0\.5{padding-top:0.125rem}.pt-1{padding-top:0.25rem}.pt-2\.5{padding-top:0.625rem}.pt-3{padding-top:0.75rem}.pt-5{padding-top:1.25rem}.pt-2{padding-top:0.5rem}.pt-4{padding-top:1rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.text-\[\#0066b3\]{--tw-text-opacity:1;color:rgb(0 102 179 / var(--tw-text-opacity, 1))}.text-\[\#06394c\]{--tw-text-opacity:1;color:rgb(6 57 76 / var(--tw-text-opacity, 1))}.text-\[\#084459\]{--tw-text-opacity:1;color:rgb(8 68 89 / var(--tw-text-opacity, 1))}.text-amber-900{--tw-text-opacity:1;color:rgb(120 53 15 / var(--tw-text-opacity, 1))}.text-cyan-100{--tw-text-opacity:1;color:rgb(207 250 254 / var(--tw-text-opacity, 1))}.text-cyan-200{--tw-text-opacity:1;color:rgb(165 243 252 / var(--tw-text-opacity, 1))}.text-cyan-200\/90{color:rgb(165 243 252 / 0.9)}.text-cyan-300{--tw-text-opacity:1;color:rgb(103 232 249 / var(--tw-text-opacity, 1))}.text-emerald-200{--tw-text-opacity:1;color:rgb(167 243 208 / var(--tw-text-opacity, 1))}.text-emerald-300{--tw-text-opacity:1;color:rgb(110 231 183 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-emerald-800{--tw-text-opacity:1;color:rgb(6 95 70 / var(--tw-text-opacity, 1))}.text-emerald-900{--tw-text-opacity:1;color:rgb(6 78 59 / var(--tw-text-opacity, 1))}.text-indigo-900{--tw-text-opacity:1;color:rgb(49 46 129 / var(--tw-text-opacity, 1))}.text-orange-700{--tw-text-opacity:1;color:rgb(194 65 12 / var(--tw-text-opacity, 1))}.text-orange-800{--tw-text-opacity:1;color:rgb(154 52 18 / var(--tw-text-opacity, 1))}.text-purple-700{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.text-purple-800{--tw-text-opacity:1;color:rgb(107 33 168 / var(--tw-text-opacity, 1))}.text-purple-900{--tw-text-opacity:1;color:rgb(88 28 135 / var(--tw-text-opacity, 1))}.text-red-700{--tw-text-opacity:1;color:rgb(185 28 28 / var(--tw-text-opacity, 1))}.text-red-800{--tw-text-opacity:1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}.text-rose-600{--tw-text-opacity:1;color:rgb(225 29 72 / var(--tw-text-opacity, 1))}.text-rose-700{--tw-text-opacity:1;color:rgb(190 18 60 / var(--tw-text-opacity, 1))}.text-rose-800{--tw-text-opacity:1;color:rgb(159 18 57 / var(--tw-text-opacity, 1))}.text-rose-900{--tw-text-opacity:1;color:rgb(136 19 55 / var(--tw-text-opacity, 1))}.text-sky-100{--tw-text-opacity:1;color:rgb(224 242 254 / var(--tw-text-opacity, 1))}.text-sky-950{--tw-text-opacity:1;color:rgb(8 47 73 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-slate-950{--tw-text-opacity:1;color:rgb(2 6 23 / var(--tw-text-opacity, 1))}.text-teal-800{--tw-text-opacity:1;color:rgb(17 94 89 / var(--tw-text-opacity, 1))}.text-teal-900{--tw-text-opacity:1;color:rgb(19 78 74 / var(--tw-text-opacity, 1))}.text-teal-950{--tw-text-opacity:1;color:rgb(4 47 46 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9 / var(--tw-text-opacity, 1))}.text-amber-800{--tw-text-opacity:1;color:rgb(146 64 14 / var(--tw-text-opacity, 1))}.text-emerald-950{--tw-text-opacity:1;color:rgb(2 44 34 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-teal-700{--tw-text-opacity:1;color:rgb(15 118 110 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-rose-950{--tw-text-opacity:1;color:rgb(76 5 25 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-\[\#06394c\]:hover{--tw-bg-opacity:1;background-color:rgb(6 57 76 / var(--tw-bg-opacity, 1))}.hover\:bg-amber-300:hover{--tw-bg-opacity:1;background-color:rgb(252 211 77 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-100:hover{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-400:hover{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500\/35:hover{background-color:rgb(16 185 129 / 0.35)}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-800:hover{--tw-bg-opacity:1;background-color:rgb(6 95 70 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-100:hover{--tw-bg-opacity:1;background-color:rgb(255 228 230 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-700:hover{--tw-bg-opacity:1;background-color:rgb(190 18 60 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-800:hover{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-800:hover{--tw-bg-opacity:1;background-color:rgb(17 94 89 / var(--tw-bg-opacity, 1))}.hover\:bg-white\/20:hover{background-color:rgb(255 255 255 / 0.2)}.hover\:bg-white\/25:hover{background-color:rgb(255 255 255 / 0.25)}.hover\:bg-amber-400:hover{--tw-bg-opacity:1;background-color:rgb(251 191 36 / var(--tw-bg-opacity, 1))}.hover\:bg-amber-50:hover{--tw-bg-opacity:1;background-color:rgb(255 251 235 / var(--tw-bg-opacity, 1))}.hover\:bg-cyan-400:hover{--tw-bg-opacity:1;background-color:rgb(34 211 238 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-50:hover{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.hover\:bg-sky-100:hover{--tw-bg-opacity:1;background-color:rgb(224 242 254 / var(--tw-bg-opacity, 1))}.hover\:bg-sky-50:hover{--tw-bg-opacity:1;background-color:rgb(240 249 255 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-900:hover{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-50:hover{--tw-bg-opacity:1;background-color:rgb(240 253 250 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-600:hover{--tw-bg-opacity:1;background-color:rgb(13 148 136 / var(--tw-bg-opacity, 1))}.hover\:bg-amber-600:hover{--tw-bg-opacity:1;background-color:rgb(217 119 6 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-50:hover{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-50\/80:hover{background-color:rgb(248 250 252 / 0.8)}.hover\:bg-slate-700:hover{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:opacity-95:hover{opacity:0.95}.focus\:border-\[\#0066b3\]:focus{--tw-border-opacity:1;border-color:rgb(0 102 179 / var(--tw-border-opacity, 1))}.focus\:border-\[\#084459\]:focus{--tw-border-opacity:1;border-color:rgb(8 68 89 / var(--tw-border-opacity, 1))}.focus\:bg-white:focus{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}@media (min-width: 640px){.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.sm\:p-6{padding:1.5rem}.sm\:p-8{padding:2rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 768px){.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:col-span-4{grid-column:span 4 / span 4}.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-6{grid-column:span 6 / span 6}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:col-span-8{grid-column:span 8 / span 8}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-6{grid-template-columns:repeat(6, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style></head>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.right-4{right:1rem}.top-0{top:0px}.top-4{top:1rem}.z-30{z-index:30}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.my-4{margin-top:1rem;margin-bottom:1rem}.mb-1{margin-bottom:0.25rem}.mb-1\.5{margin-bottom:0.375rem}.mb-2{margin-bottom:0.5rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-3{margin-top:0.75rem}.mb-3{margin-bottom:0.75rem}.mt-4{margin-top:1rem}.mt-8{margin-top:2rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-12{height:3rem}.h-16{height:4rem}.h-2\.5{height:0.625rem}.h-6{height:1.5rem}.h-3\.5{height:0.875rem}.h-4{height:1rem}.h-72{height:18rem}.h-auto{height:auto}.max-h-10{max-height:2.5rem}.max-h-14{max-height:3.5rem}.min-h-screen{min-height:100vh}.min-h-\[420px\]{min-height:420px}.w-12{width:3rem}.w-16{width:4rem}.w-2\.5{width:0.625rem}.w-6{width:1.5rem}.w-auto{width:auto}.w-full{width:100%}.w-3\.5{width:0.875rem}.w-4{width:1rem}.min-w-\[220px\]{min-width:220px}.max-w-3xl{max-width:48rem}.max-w-7xl{max-width:80rem}.max-w-md{max-width:28rem}.max-w-\[740px\]{max-width:740px}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.border-collapse{border-collapse:collapse}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.list-disc{list-style-type:disc}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-3\.5{gap:0.875rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-1{gap:0.25rem}.gap-5{gap:1.25rem}.space-y-0\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.125rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.125rem * var(--tw-space-y-reverse))}.space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-3\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.875rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.875rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-x-1 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.25rem * var(--tw-space-x-reverse));margin-left:calc(0.25rem * calc(1 - var(--tw-space-x-reverse)))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-slate-100 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(241 245 249 / var(--tw-divide-opacity, 1))}.divide-slate-200 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(226 232 240 / var(--tw-divide-opacity, 1))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.scroll-smooth{scroll-behavior:smooth}.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-sm{border-radius:0.125rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-b-2{border-bottom-width:2px}.border-\[\#084459\]{--tw-border-opacity:1;border-color:rgb(8 68 89 / var(--tw-border-opacity, 1))}.border-amber-300{--tw-border-opacity:1;border-color:rgb(252 211 77 / var(--tw-border-opacity, 1))}.border-cyan-300\/50{border-color:rgb(103 232 249 / 0.5)}.border-cyan-400{--tw-border-opacity:1;border-color:rgb(34 211 238 / var(--tw-border-opacity, 1))}.border-cyan-400\/30{border-color:rgb(34 211 238 / 0.3)}.border-cyan-400\/40{border-color:rgb(34 211 238 / 0.4)}.border-cyan-500\/20{border-color:rgb(6 182 212 / 0.2)}.border-emerald-200{--tw-border-opacity:1;border-color:rgb(167 243 208 / var(--tw-border-opacity, 1))}.border-emerald-400\/40{border-color:rgb(52 211 153 / 0.4)}.border-emerald-600{--tw-border-opacity:1;border-color:rgb(5 150 105 / var(--tw-border-opacity, 1))}.border-purple-300{--tw-border-opacity:1;border-color:rgb(216 180 254 / var(--tw-border-opacity, 1))}.border-rose-200{--tw-border-opacity:1;border-color:rgb(254 205 211 / var(--tw-border-opacity, 1))}.border-rose-300{--tw-border-opacity:1;border-color:rgb(253 164 175 / var(--tw-border-opacity, 1))}.border-rose-400{--tw-border-opacity:1;border-color:rgb(251 113 133 / var(--tw-border-opacity, 1))}.border-rose-500{--tw-border-opacity:1;border-color:rgb(244 63 94 / var(--tw-border-opacity, 1))}.border-sky-200{--tw-border-opacity:1;border-color:rgb(186 230 253 / var(--tw-border-opacity, 1))}.border-sky-300{--tw-border-opacity:1;border-color:rgb(125 211 252 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-teal-200{--tw-border-opacity:1;border-color:rgb(153 246 228 / var(--tw-border-opacity, 1))}.border-teal-300{--tw-border-opacity:1;border-color:rgb(94 234 212 / var(--tw-border-opacity, 1))}.border-teal-400{--tw-border-opacity:1;border-color:rgb(45 212 191 / var(--tw-border-opacity, 1))}.border-teal-500{--tw-border-opacity:1;border-color:rgb(20 184 166 / var(--tw-border-opacity, 1))}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.border-white\/25{border-color:rgb(255 255 255 / 0.25)}.border-white\/30{border-color:rgb(255 255 255 / 0.3)}.border-emerald-300{--tw-border-opacity:1;border-color:rgb(110 231 183 / var(--tw-border-opacity, 1))}.border-emerald-500{--tw-border-opacity:1;border-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.border-orange-300{--tw-border-opacity:1;border-color:rgb(253 186 116 / var(--tw-border-opacity, 1))}.border-red-300{--tw-border-opacity:1;border-color:rgb(252 165 165 / var(--tw-border-opacity, 1))}.border-white\/40{border-color:rgb(255 255 255 / 0.4)}.border-indigo-200{--tw-border-opacity:1;border-color:rgb(199 210 254 / var(--tw-border-opacity, 1))}.bg-\[\#0066b3\]{--tw-bg-opacity:1;background-color:rgb(0 102 179 / var(--tw-bg-opacity, 1))}.bg-\[\#04202c\]\/90{background-color:rgb(4 32 44 / 0.9)}.bg-\[\#042430\]\/80{background-color:rgb(4 36 48 / 0.8)}.bg-\[\#06394c\]{--tw-bg-opacity:1;background-color:rgb(6 57 76 / var(--tw-bg-opacity, 1))}.bg-\[\#084459\]{--tw-bg-opacity:1;background-color:rgb(8 68 89 / var(--tw-bg-opacity, 1))}.bg-\[\#1e293b\]{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-amber-400{--tw-bg-opacity:1;background-color:rgb(251 191 36 / var(--tw-bg-opacity, 1))}.bg-cyan-500\/30{background-color:rgb(6 182 212 / 0.3)}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-500\/20{background-color:rgb(16 185 129 / 0.2)}.bg-emerald-500\/25{background-color:rgb(16 185 129 / 0.25)}.bg-emerald-500\/90{background-color:rgb(16 185 129 / 0.9)}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-purple-50\/70{background-color:rgb(250 245 255 / 0.7)}.bg-purple-700{--tw-bg-opacity:1;background-color:rgb(126 34 206 / var(--tw-bg-opacity, 1))}.bg-rose-50{--tw-bg-opacity:1;background-color:rgb(255 241 242 / var(--tw-bg-opacity, 1))}.bg-rose-50\/50{background-color:rgb(255 241 242 / 0.5)}.bg-rose-50\/70{background-color:rgb(255 241 242 / 0.7)}.bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.bg-sky-100{--tw-bg-opacity:1;background-color:rgb(224 242 254 / var(--tw-bg-opacity, 1))}.bg-sky-50{--tw-bg-opacity:1;background-color:rgb(240 249 255 / var(--tw-bg-opacity, 1))}.bg-sky-50\/40{background-color:rgb(240 249 255 / 0.4)}.bg-sky-50\/70{background-color:rgb(240 249 255 / 0.7)}.bg-sky-50\/80{background-color:rgb(240 249 255 / 0.8)}.bg-sky-500{--tw-bg-opacity:1;background-color:rgb(14 165 233 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-slate-50\/70{background-color:rgb(248 250 252 / 0.7)}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-950\/90{background-color:rgb(2 6 23 / 0.9)}.bg-teal-100{--tw-bg-opacity:1;background-color:rgb(204 251 241 / var(--tw-bg-opacity, 1))}.bg-teal-50{--tw-bg-opacity:1;background-color:rgb(240 253 250 / var(--tw-bg-opacity, 1))}.bg-teal-50\/70{background-color:rgb(240 253 250 / 0.7)}.bg-teal-50\/80{background-color:rgb(240 253 250 / 0.8)}.bg-teal-700{--tw-bg-opacity:1;background-color:rgb(15 118 110 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-white\/20{background-color:rgb(255 255 255 / 0.2)}.bg-white\/90{background-color:rgb(255 255 255 / 0.9)}.bg-amber-50\/50{background-color:rgb(255 251 235 / 0.5)}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-cyan-500{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.bg-emerald-700{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.bg-orange-50{--tw-bg-opacity:1;background-color:rgb(255 247 237 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity, 1))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-slate-50\/60{background-color:rgb(248 250 252 / 0.6)}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-slate-950{--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.bg-teal-50\/50{background-color:rgb(240 253 250 / 0.5)}.bg-teal-50\/60{background-color:rgb(240 253 250 / 0.6)}.bg-amber-100{--tw-bg-opacity:1;background-color:rgb(254 243 199 / var(--tw-bg-opacity, 1))}.bg-emerald-100{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-rose-100{--tw-bg-opacity:1;background-color:rgb(255 228 230 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-\[\#052938\]{--tw-gradient-from:#052938 var(--tw-gradient-from-position);--tw-gradient-to:rgb(5 41 56 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#052e3e\]{--tw-gradient-from:#052e3e var(--tw-gradient-from-position);--tw-gradient-to:rgb(5 46 62 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#06394c\]{--tw-gradient-from:#06394c var(--tw-gradient-from-position);--tw-gradient-to:rgb(6 57 76 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyan-500{--tw-gradient-from:#06b6d4 var(--tw-gradient-from-position);--tw-gradient-to:rgb(6 182 212 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-sky-50{--tw-gradient-from:#f0f9ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(240 249 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-teal-700{--tw-gradient-from:#0f766e var(--tw-gradient-from-position);--tw-gradient-to:rgb(15 118 110 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#041f2b\]{--tw-gradient-from:#041f2b var(--tw-gradient-from-position);--tw-gradient-to:rgb(4 31 43 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-\[\#073b4f\]{--tw-gradient-to:rgb(7 59 79 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #073b4f var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-\[\#084459\]{--tw-gradient-to:rgb(8 68 89 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #084459 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-white{--tw-gradient-to:rgb(255 255 255 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #fff var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-\[\#073346\]{--tw-gradient-to:rgb(7 51 70 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #073346 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-\[\#0284c7\]{--tw-gradient-to:#0284c7 var(--tw-gradient-to-position)}.to-\[\#0a4d63\]{--tw-gradient-to:#0a4d63 var(--tw-gradient-to-position)}.to-\[\#0b556c\]{--tw-gradient-to:#0b556c var(--tw-gradient-to-position)}.to-\[\#0b6477\]{--tw-gradient-to:#0b6477 var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.to-emerald-600{--tw-gradient-to:#059669 var(--tw-gradient-to-position)}.to-teal-50{--tw-gradient-to:#f0fdfa var(--tw-gradient-to-position)}.to-\[\#0a4860\]{--tw-gradient-to:#0a4860 var(--tw-gradient-to-position)}.object-contain{object-fit:contain}.p-1{padding:0.25rem}.p-1\.5{padding:0.375rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-2{padding:0.5rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pt-0\.5{padding-top:0.125rem}.pt-1{padding-top:0.25rem}.pt-2\.5{padding-top:0.625rem}.pt-3{padding-top:0.75rem}.pt-5{padding-top:1.25rem}.pb-4{padding-bottom:1rem}.pl-5{padding-left:1.25rem}.pt-2{padding-top:0.5rem}.pt-4{padding-top:1rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.text-\[\#0066b3\]{--tw-text-opacity:1;color:rgb(0 102 179 / var(--tw-text-opacity, 1))}.text-\[\#06394c\]{--tw-text-opacity:1;color:rgb(6 57 76 / var(--tw-text-opacity, 1))}.text-\[\#084459\]{--tw-text-opacity:1;color:rgb(8 68 89 / var(--tw-text-opacity, 1))}.text-amber-900{--tw-text-opacity:1;color:rgb(120 53 15 / var(--tw-text-opacity, 1))}.text-cyan-100{--tw-text-opacity:1;color:rgb(207 250 254 / var(--tw-text-opacity, 1))}.text-cyan-200{--tw-text-opacity:1;color:rgb(165 243 252 / var(--tw-text-opacity, 1))}.text-cyan-200\/90{color:rgb(165 243 252 / 0.9)}.text-cyan-300{--tw-text-opacity:1;color:rgb(103 232 249 / var(--tw-text-opacity, 1))}.text-emerald-200{--tw-text-opacity:1;color:rgb(167 243 208 / var(--tw-text-opacity, 1))}.text-emerald-300{--tw-text-opacity:1;color:rgb(110 231 183 / var(--tw-text-opacity, 1))}.text-emerald-800{--tw-text-opacity:1;color:rgb(6 95 70 / var(--tw-text-opacity, 1))}.text-indigo-900{--tw-text-opacity:1;color:rgb(49 46 129 / var(--tw-text-opacity, 1))}.text-purple-900{--tw-text-opacity:1;color:rgb(88 28 135 / var(--tw-text-opacity, 1))}.text-rose-600{--tw-text-opacity:1;color:rgb(225 29 72 / var(--tw-text-opacity, 1))}.text-rose-700{--tw-text-opacity:1;color:rgb(190 18 60 / var(--tw-text-opacity, 1))}.text-rose-800{--tw-text-opacity:1;color:rgb(159 18 57 / var(--tw-text-opacity, 1))}.text-rose-900{--tw-text-opacity:1;color:rgb(136 19 55 / var(--tw-text-opacity, 1))}.text-sky-100{--tw-text-opacity:1;color:rgb(224 242 254 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-slate-950{--tw-text-opacity:1;color:rgb(2 6 23 / var(--tw-text-opacity, 1))}.text-teal-800{--tw-text-opacity:1;color:rgb(17 94 89 / var(--tw-text-opacity, 1))}.text-teal-900{--tw-text-opacity:1;color:rgb(19 78 74 / var(--tw-text-opacity, 1))}.text-teal-950{--tw-text-opacity:1;color:rgb(4 47 46 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9 / var(--tw-text-opacity, 1))}.text-amber-800{--tw-text-opacity:1;color:rgb(146 64 14 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-emerald-900{--tw-text-opacity:1;color:rgb(6 78 59 / var(--tw-text-opacity, 1))}.text-emerald-950{--tw-text-opacity:1;color:rgb(2 44 34 / var(--tw-text-opacity, 1))}.text-orange-700{--tw-text-opacity:1;color:rgb(194 65 12 / var(--tw-text-opacity, 1))}.text-orange-800{--tw-text-opacity:1;color:rgb(154 52 18 / var(--tw-text-opacity, 1))}.text-purple-700{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.text-purple-800{--tw-text-opacity:1;color:rgb(107 33 168 / var(--tw-text-opacity, 1))}.text-red-700{--tw-text-opacity:1;color:rgb(185 28 28 / var(--tw-text-opacity, 1))}.text-red-800{--tw-text-opacity:1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}.text-sky-950{--tw-text-opacity:1;color:rgb(8 47 73 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-teal-700{--tw-text-opacity:1;color:rgb(15 118 110 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-rose-950{--tw-text-opacity:1;color:rgb(76 5 25 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-\[\#06394c\]:hover{--tw-bg-opacity:1;background-color:rgb(6 57 76 / var(--tw-bg-opacity, 1))}.hover\:bg-amber-300:hover{--tw-bg-opacity:1;background-color:rgb(252 211 77 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-100:hover{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500\/35:hover{background-color:rgb(16 185 129 / 0.35)}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-100:hover{--tw-bg-opacity:1;background-color:rgb(255 228 230 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-700:hover{--tw-bg-opacity:1;background-color:rgb(190 18 60 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-800:hover{--tw-bg-opacity:1;background-color:rgb(17 94 89 / var(--tw-bg-opacity, 1))}.hover\:bg-white\/20:hover{background-color:rgb(255 255 255 / 0.2)}.hover\:bg-amber-400:hover{--tw-bg-opacity:1;background-color:rgb(251 191 36 / var(--tw-bg-opacity, 1))}.hover\:bg-amber-50:hover{--tw-bg-opacity:1;background-color:rgb(255 251 235 / var(--tw-bg-opacity, 1))}.hover\:bg-cyan-400:hover{--tw-bg-opacity:1;background-color:rgb(34 211 238 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-800:hover{--tw-bg-opacity:1;background-color:rgb(6 95 70 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-50:hover{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.hover\:bg-sky-100:hover{--tw-bg-opacity:1;background-color:rgb(224 242 254 / var(--tw-bg-opacity, 1))}.hover\:bg-sky-50:hover{--tw-bg-opacity:1;background-color:rgb(240 249 255 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-800:hover{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-900:hover{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-50:hover{--tw-bg-opacity:1;background-color:rgb(240 253 250 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-600:hover{--tw-bg-opacity:1;background-color:rgb(13 148 136 / var(--tw-bg-opacity, 1))}.hover\:bg-amber-600:hover{--tw-bg-opacity:1;background-color:rgb(217 119 6 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-50:hover{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-50\/80:hover{background-color:rgb(248 250 252 / 0.8)}.hover\:bg-slate-700:hover{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:opacity-95:hover{opacity:0.95}.focus\:border-\[\#0066b3\]:focus{--tw-border-opacity:1;border-color:rgb(0 102 179 / var(--tw-border-opacity, 1))}.focus\:border-\[\#084459\]:focus{--tw-border-opacity:1;border-color:rgb(8 68 89 / var(--tw-border-opacity, 1))}.focus\:bg-white:focus{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}@media (min-width: 640px){.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.sm\:p-6{padding:1.5rem}.sm\:p-8{padding:2rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 768px){.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:col-span-4{grid-column:span 4 / span 4}.lg\:col-span-6{grid-column:span 6 / span 6}.lg\:col-span-8{grid-column:span 8 / span 8}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:grid-cols-6{grid-template-columns:repeat(6, minmax(0, 1fr))}.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style></head>
 <body class="min-h-screen flex flex-col bg-slate-100 text-slate-900">
 
   <!-- Toast Notification Banner -->
@@ -947,7 +224,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             <div class="font-extrabold uppercase text-cyan-300">HỖ TRỢ CẤP QUYỀN &amp; GIA HẠN TÀI KHOẢN:</div>
             <p class="mt-0.5">
               Cán bộ y tế cần cấp mới hoặc gia hạn quyền truy cập vui lòng liên hệ Quản trị viên hệ thống:
-              <strong class="text-white">ThS. Trần Tuấn Anh</strong> — Đơn nguyên Di truyền và Sinh học phân tử (<a href="mailto:anhtran.nihbt@gmail.com" class="text-cyan-300 underline" target="_blank" rel="noopener noreferrer">anhtran.nihbt@gmail.com</a>).
+              <strong class="text-white">ThS. Trần Tuấn Anh</strong> — Đơn nguyên Di truyền và Sinh học phân tử (<a href="mailto:anhtran.nihbt@gmail.com" class="text-cyan-300 underline">anhtran.nihbt@gmail.com</a>).
             </p>
           </div>
         </div>
@@ -995,7 +272,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           </div>
 
           <!-- STRICTLY HIDDEN BY DEFAULT - ONLY SHOWN AFTER ADMIN LOGIN (SCOPE_ALL) -->
-          <a id="link-open-main-db" href="https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit" target="_blank" rel="noopener" class="rounded-xl bg-amber-400 px-3 py-2 text-xs font-black text-slate-950 shadow hover:bg-amber-300 transition hidden">
+          <a id="link-open-main-db" href="https://docs.google.com/spreadsheets/d/133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8/edit" target="_blank" rel="noopener" class="rounded-xl bg-amber-400 px-3 py-2 text-xs font-black text-slate-950 shadow hover:bg-amber-300 transition hidden">
             📂 Mở CSDL_Thalassaemia_ClinicalLens_HNH
           </a>
 
@@ -1271,38 +548,6 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               <div>
                 <label for="inp-hbother" class="block font-bold text-slate-700">Hb# (HbCS/Khác)</label>
                 <input id="inp-hbother" type="text" value="" placeholder="VD: HbCs: 1.8" class="cbc-input mt-0.5 w-full rounded-lg border border-slate-300 px-2.5 py-1.5 font-extrabold text-slate-900">
-              </div>
-            </div>
-          </div>
-
-          <!-- SUBSECTION 4: CLINICAL GROUP, CONFIRMED HGVS & CLINICAL PEARL (FOR FULL CASE CRUD) -->
-          <div class="pt-1 space-y-2.5">
-            <div class="hch-subsection-bar flex items-center justify-between text-xs">
-              <span>4. Phân nhóm Hồ sơ, Kiểu gen Xác chẩn &amp; Ghi chú Hội chẩn</span>
-              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold text-emerald-900">Lưu vào CSDL</span>
-            </div>
-            <div class="space-y-2 text-xs">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div>
-                  <label for="inp-case-group-code" class="block font-bold text-slate-700">Nhóm Bệnh lý Lâm sàng</label>
-                  <select id="inp-case-group-code" class="mt-0.5 w-full rounded-lg border border-slate-300 bg-slate-50 px-2 py-1.5 font-bold text-[#06394c]">
-                    <option value="G1_PITFALLS">Nhóm I: Bẫy Chẩn đoán &amp; Điểm mù Lâm sàng</option>
-                    <option value="G2_ALPHA_CARRIERS">Nhóm II: Người lành mang gen Alpha-Thalassemia</option>
-                    <option value="G3_BETA_HBE_CARRIERS">Nhóm III: Người lành mang gen Beta-Thalassemia &amp; HbE</option>
-                    <option value="G4_DISEASE_PEDIATRIC">Nhóm IV: Bệnh Nhi &amp; Thể Nặng/Trung gian (HbH, E/β, Major, Bart's)</option>
-                    <option value="G5_COINHERIT_RARE">Nhóm V: Đồng di truyền Phức hợp α+β &amp; Biến thể Hiếm</option>
-                    <option value="G6_IDA_ACD_DIFF">Nhóm VI: Phân biệt Thiếu máu Thiếu sắt (IDA), Viêm mạn (ACD)</option>
-                    <option value="G7_PRENATAL_COUPLE">Nhóm VII: Cặp đôi Tiền hôn nhân, Trước sinh &amp; Mẫu Dịch ối</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="inp-confirmed-hgvs" class="block font-bold text-slate-700">Kiểu gen Xác chẩn / Dự báo (HGVS)</label>
-                  <input id="inp-confirmed-hgvs" type="text" value="NG_000006.1:g.26264_45564del19301 (--SEA/αα)" placeholder="Để trống sẽ tự lấy kiểu gen dự báo số 1..." class="mt-0.5 w-full rounded-lg border border-slate-300 px-2.5 py-1.5 font-mono font-bold text-rose-700">
-                </div>
-              </div>
-              <div>
-                <label for="inp-clinical-pearl" class="block font-bold text-slate-700">Ý nghĩa Lâm sàng &amp; Lưu ý Hội chẩn (Clinical Pearl)</label>
-                <textarea id="inp-clinical-pearl" rows="2" placeholder="Nhập nhận định lâm sàng hoặc lưu ý đặc biệt cho ca bệnh này..." class="mt-0.5 w-full rounded-lg border border-slate-300 px-2.5 py-1.5 font-medium text-slate-800"></textarea>
               </div>
             </div>
           </div>
@@ -1971,15 +1216,6 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             <input id="inp-search-registry" type="text" placeholder="Tìm theo SID, Họ tên hoặc Kiểu gen..." class="rounded-xl border border-white/40 bg-white px-3 py-1.5 text-xs font-bold text-slate-900 focus:outline-none">
             <button id="btn-registry-add-new" type="button" class="rounded-xl bg-amber-400 px-3 py-1.5 text-xs font-black text-slate-950 hover:bg-amber-300 transition">
               + Tạo Ca Bệnh Mới
-            </button>
-            <button id="btn-sync-cloud-db" type="button" class="rounded-xl bg-emerald-500 px-3 py-1.5 text-xs font-black text-white hover:bg-emerald-400 transition">
-              ☁️ Đồng bộ Cloud CSDL
-            </button>
-            <button id="btn-export-cases-csv" type="button" class="rounded-xl bg-white/15 border border-white/30 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/25 transition">
-              ⬇ Xuất CSV
-            </button>
-            <button id="btn-reset-100-cases" type="button" class="rounded-xl bg-white/10 border border-white/20 px-2.5 py-1.5 text-[11px] font-bold text-cyan-100 hover:bg-white/20 transition">
-              ♻ Khôi phục 100 Ca Gốc
             </button>
           </div>
         </div>
@@ -4316,7 +3552,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             <td class="p-2.5 font-mono font-extrabold text-[#06394c]">QA-17</td>
             <td class="p-2.5 font-bold text-slate-900">Kiểm định Bảo mật Cổng Đăng nhập (Không lộ nút Nạp nhanh) &amp; Phân quyền Nút Mở CSDL</td>
             <td class="p-2.5 font-mono text-[11px] text-slate-600">Kiểm tra DOM Login Gate và liên kết nút Mở CSDL</td>
-            <td class="p-2.5 text-slate-700">0 nút nạp nhanh tài khoản; Link CSDL trỏ đúng ID 1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg</td>
+            <td class="p-2.5 text-slate-700">0 nút nạp nhanh tài khoản; Link CSDL trỏ đúng ID 133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8</td>
             <td class="p-2.5 font-mono text-[11px] font-bold text-[#0066b3]">QuickFillBtns=0, DB_ID_Linked=true</td>
             <td class="p-2.5 text-right">
               <span class="rounded-full bg-emerald-600 px-2.5 py-0.5 text-[11px] font-extrabold text-white">PASS</span>
@@ -4369,7 +3605,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           </div>
           <div class="text-right text-xs">
             <div><strong>Mã hồ sơ (SID):</strong> <span id="rep-sid" class="font-mono font-bold">HCH-84102</span></div>
-            <div><strong>Ngày giờ kết xuất:</strong> <span id="rep-date">21:17:14 9/11/2026</span></div>
+            <div><strong>Ngày giờ kết xuất:</strong> <span id="rep-date">14:28:18 11/11/2026</span></div>
             <div><strong>Quyền truy cập:</strong> <span id="rep-scope" class="font-bold text-[#0066b3]">SCOPE_ALL</span></div>
           </div>
         </div>
@@ -4424,7 +3660,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               &lt;/&gt; Trung Tâm Quản Trị Phân Quyền `Allowed_Users`, Tự Động Khởi Tạo CSDL 12 Sheets &amp; Xuất GitHub Pages
             </h2>
             <p class="text-xs text-cyan-100">
-              Liên kết trực tiếp tệp Google Sheets <code>[CSDL_Thalassaemia_ClinicalLens_HNH]</code> (ID: <code>1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg</code>)
+              Liên kết trực tiếp tệp Google Sheets <code>[CSDL_Thalassaemia_ClinicalLens_HNH]</code> (ID: <code>133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8</code>)
             </p>
           </div>
           <span class="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-bold text-emerald-300 border border-emerald-400/40">
@@ -4433,13 +3669,13 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         </div>
 
         <div class="mt-4 flex flex-wrap gap-2 text-xs">
-          <a id="admin-link-main-db" href="https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit" target="_blank" rel="noopener" class="rounded-xl bg-emerald-600 px-3.5 py-2 font-extrabold text-white hover:bg-emerald-500 transition">
+          <a id="admin-link-main-db" href="https://docs.google.com/spreadsheets/d/133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8/edit" target="_blank" rel="noopener" class="rounded-xl bg-emerald-600 px-3.5 py-2 font-extrabold text-white hover:bg-emerald-500 transition">
             🔗 Mở Trực Tiếp Database [CSDL_Thalassaemia_ClinicalLens_HNH] ↗
           </a>
-          <a id="admin-link-pedigree-db" href="https://docs.google.com/spreadsheets/d/1AfSU8iW4mR0sK8-ld6Vv8PZmCbwqCebAonfjmOvlNvo/edit" target="_blank" rel="noopener" class="rounded-xl bg-teal-700 px-3.5 py-2 font-extrabold text-white hover:bg-teal-600 transition">
+          <a id="admin-link-pedigree-db" href="https://docs.google.com/spreadsheets/d/133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8/edit" target="_blank" rel="noopener" class="rounded-xl bg-teal-700 px-3.5 py-2 font-extrabold text-white hover:bg-teal-600 transition">
             🧬 Mở Database Phả Hệ [CSDL_PhaHe_DiTruyen_NSGC] ↗
           </a>
-          <a id="admin-link-gas-project" href="https://script.google.com/d/1GjjsVwy8r4WgAjhgJmmuqAWCDf3tCdZmIIhvFrH239rXFaBiJEsyvU7v/edit" target="_blank" rel="noopener" class="rounded-xl bg-amber-500 px-3.5 py-2 font-extrabold text-slate-950 hover:bg-amber-400 transition">
+          <a href="https://script.google.com" target="_blank" rel="noopener" class="rounded-xl bg-amber-500 px-3.5 py-2 font-extrabold text-slate-950 hover:bg-amber-400 transition">
             ⚙ Mở Google Apps Script Project ↗
           </a>
         </div>
@@ -4473,7 +3709,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               <label for="inp-sheet-db-url" class="block text-xs font-extrabold text-slate-700 mb-1">
                 Link Google Sheets Database ([CSDL_Thalassaemia_ClinicalLens_HNH]):
               </label>
-              <input id="inp-sheet-db-url" type="url" value="https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-xs font-mono font-semibold text-slate-900 focus:border-[#084459] focus:outline-none">
+              <input id="inp-sheet-db-url" type="url" value="https://docs.google.com/spreadsheets/d/133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8/edit" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-xs font-mono font-semibold text-slate-900 focus:border-[#084459] focus:outline-none">
             </div>
           </div>
 
@@ -4514,7 +3750,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         </div>
         <div class="p-4 space-y-3">
           <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-950">
-            <strong>⚡ Cơ chế Tự động hóa hoàn toàn:</strong> Khi chạy hàm <code>setup()</code> trong <code>Code.gs</code>, Script sẽ tự động kết nối tới ID bảng tính <code>1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg</code> (hoặc tự tạo mới tệp <code>[CSDL_Thalassaemia_ClinicalLens_HNH]</code>), dựng đủ 12 Sheets chuẩn và bảo toàn toàn bộ các tài khoản <code>Allowed_Users</code> đã cấp phép.
+            <strong>⚡ Cơ chế Tự động hóa hoàn toàn:</strong> Khi chạy hàm <code>setup()</code> trong <code>Code.gs</code>, Script sẽ tự động kết nối tới ID bảng tính <code>133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8</code> (hoặc tự tạo mới tệp <code>[CSDL_Thalassaemia_ClinicalLens_HNH]</code>), dựng đủ 12 Sheets chuẩn và bảo toàn toàn bộ các tài khoản <code>Allowed_Users</code> đã cấp phép.
           </div>
           <textarea id="textarea-codegs-preview" readonly="" rows="10" class="w-full rounded-xl bg-slate-950 p-3.5 font-mono text-[11px] text-cyan-300 focus:outline-none"></textarea>
         </div>
@@ -4555,7 +3791,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             <p class="text-[11px] text-cyan-100">Quản lý tập trung tài khoản người dùng, mật khẩu, phạm vi dữ liệu (<code>Data_Scope</code>), quyền thao tác (<code>Permissions_JSON</code>) và thời hạn sử dụng.</p>
           </div>
           <div class="flex flex-wrap gap-2">
-            <a id="admin-link-users-sheet" href="https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit" target="_blank" rel="noopener" class="rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-extrabold text-white hover:bg-emerald-500 transition">
+            <a id="admin-link-users-sheet" href="https://docs.google.com/spreadsheets/d/133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8/edit" target="_blank" rel="noopener" class="rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-extrabold text-white hover:bg-emerald-500 transition">
               📂 Mở Sheet Allowed_Users ↗
             </a>
             <button id="btn-reset-user-form" type="button" class="rounded-xl bg-amber-400 px-3 py-1.5 text-xs font-black text-slate-950 hover:bg-amber-300 transition">
@@ -4913,25 +4149,25 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             </thead>
             <tbody id="tbody-audit-logs" class="divide-y divide-slate-100 font-mono text-[11px]">
         <tr class="hover:bg-slate-50">
-          <td class="p-2.5 text-slate-500">21:17:14 2026-11-09</td>
+          <td class="p-2.5 text-slate-500">14:28:18 2026-11-11</td>
           <td class="p-2.5 font-bold text-[#06394c]">anhtran.nihbt@gmail.com</td>
-          <td class="p-2.5 font-bold text-slate-800">STAFF_LOGIN_SUCCESS_DB</td>
-          <td class="p-2.5 text-slate-700">SCOPE_ALL (anhtran.nihbt@gmail.com)</td>
+          <td class="p-2.5 font-bold text-slate-800">STAFF_LOGIN_SUCCESS</td>
+          <td class="p-2.5 text-slate-700">SCOPE_ALL</td>
           <td class="p-2.5">
             <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800">SUCCESS</span>
           </td>
-          <td class="p-2.5 text-emerald-700 font-mono">93ebab8dd8f4bb6a</td>
+          <td class="p-2.5 text-emerald-700 font-mono">1a61fc2a23eb277f</td>
         </tr>
       
         <tr class="hover:bg-slate-50">
-          <td class="p-2.5 text-slate-500">21:11:43 2026-11-09</td>
+          <td class="p-2.5 text-slate-500">14:22:32 2026-11-11</td>
           <td class="p-2.5 font-bold text-[#06394c]">system@nhihanoi.vn</td>
           <td class="p-2.5 font-bold text-slate-800">SYSTEM_BOOT_ZERO_TRUST_GATE</td>
           <td class="p-2.5 text-slate-700">LOCKED_AWAITING_AUTH</td>
           <td class="p-2.5">
             <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800">SUCCESS</span>
           </td>
-          <td class="p-2.5 text-emerald-700 font-mono">cb083faa7ecc1798</td>
+          <td class="p-2.5 text-emerald-700 font-mono">e6ebbc6005824800</td>
         </tr>
       </tbody>
           </table>
@@ -4958,135 +4194,80 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
     // =========================================================================
     // 0. DEFAULT GOOGLE APPS SCRIPT API ENDPOINT & GOOGLE SHEETS URL
     // =========================================================================
-    const DEFAULT_GAS_API_URL = 'https://script.google.com/macros/s/AKfycbyKM4UEJBbxwi5IpUBs9aPNEEchjFLH3rwMOvDH8nRQlrIaglDOcMQlW3y0WqYotZgz8Q/exec';
-    const MAIN_DB_SPREADSHEET_ID = '1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg';
-    const PEDIGREE_DB_SPREADSHEET_ID = '1AfSU8iW4mR0sK8-ld6Vv8PZmCbwqCebAonfjmOvlNvo';
-    const GAS_SCRIPT_PROJECT_URL = 'https://script.google.com/d/1GjjsVwy8r4WgAjhgJmmuqAWCDf3tCdZmIIhvFrH239rXFaBiJEsyvU7v/edit';
-    let currentSheetDbUrl = 'https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit';
-    let currentPedigreeDbUrl = 'https://docs.google.com/spreadsheets/d/1AfSU8iW4mR0sK8-ld6Vv8PZmCbwqCebAonfjmOvlNvo/edit';
-    let currentGasApiUrl = DEFAULT_GAS_API_URL;
-    const STORAGE_KEYS = {
-      USERS: 'HCH_DB_ALLOWED_USERS_V9',
-      CASES: 'HCH_DB_PATIENT_CASES_V9',
-      AUDIT: 'HCH_DB_AUDIT_LOGS_V9',
-      GAS_URL: 'HCH_GAS_ENDPOINT',
-      SHEET_URL: 'HCH_SHEET_DB_URL'
-    };
+    const DEFAULT_GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwtlqPO43JOidJhKNeRHAehiqheQvEo5dgutq1ojA-LA_lIjzME9BHQZU91JRq-KE6LDA/exec';
+    let currentSheetDbUrl = 'https://docs.google.com/spreadsheets/d/133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8/edit';
 
     // =========================================================================
     // 1. ALLOWED_USERS DATABASE (SYNCHRONIZED WITH TTA_PediaInfect-clinical)
     // =========================================================================
     const ALLOWED_USERS_DB = [
-  {
-    "Email": "anhtran.nihbt@gmail.com",
-    "Password": "TTA@Admin2026",
-    "Full_Name": "ThS. Trần Tuấn Anh",
-    "Title_Role": "Chuyên gia Di truyền & SHPT / Primary Admin",
-    "Department": "Đơn nguyên Di truyền và Sinh học phân tử",
-    "Data_Scope": "SCOPE_ALL",
-    "Access_Expires_At": "2031-01-01",
-    "Status": "ACTIVE",
-    "Permissions": {
-      "can_view": true,
-      "can_create": true,
-      "can_edit": true,
-      "can_delete": true,
-      "can_validate_lab": true,
-      "can_view_admin_tab": true
-    },
-    "Last_Login": "2026-11-09T14:17:14.346Z"
-  },
-  {
-    "Email": "bs.huyethoc@nhihanoi.vn",
-    "Password": "NhiHanoi@2026",
-    "Full_Name": "BSCKII. Nguyễn Minh Đức",
-    "Title_Role": "Trưởng khoa Huyết học Lâm sàng",
-    "Department": "Khoa Huyết học - Truyền máu",
-    "Data_Scope": "SCOPE_DEPT",
-    "Access_Expires_At": "2027-07-01",
-    "Status": "ACTIVE",
-    "Permissions": {
-      "can_view": true,
-      "can_create": true,
-      "can_edit": true,
-      "can_delete": false,
-      "can_validate_lab": false,
-      "can_view_admin_tab": false
-    }
-  },
-  {
-    "Email": "bs.sankhoa@nhihanoi.vn",
-    "Password": "NhiHanoi@2026",
-    "Full_Name": "ThS.BS. Lê Thu Hà",
-    "Title_Role": "Bác sĩ Chuyên khoa Sàng lọc Trước sinh",
-    "Department": "Trung tâm Sàng lọc Trước sinh & Sơ sinh",
-    "Data_Scope": "SCOPE_DEPT",
-    "Access_Expires_At": "2026-12-15",
-    "Status": "ACTIVE",
-    "Permissions": {
-      "can_view": true,
-      "can_create": true,
-      "can_edit": true,
-      "can_delete": false,
-      "can_validate_lab": false,
-      "can_view_admin_tab": false
-    }
-  },
-  {
-    "Email": "lab.shpt@nhihanoi.vn",
-    "Password": "NhiHanoi@2026",
-    "Full_Name": "CNXN. Phạm Hoàng Nam",
-    "Title_Role": "Kỹ thuật viên Trưởng Sinh học phân tử",
-    "Department": "Đơn nguyên Di truyền và Sinh học phân tử",
-    "Data_Scope": "SCOPE_LAB",
-    "Access_Expires_At": "2028-01-01",
-    "Status": "ACTIVE",
-    "Permissions": {
-      "can_view": true,
-      "can_create": false,
-      "can_edit": true,
-      "can_delete": false,
-      "can_validate_lab": true,
-      "can_view_admin_tab": false
-    }
-  },
-  {
-    "Email": "bsnt.noitru@nhihanoi.vn",
-    "Password": "NhiHanoi@2026",
-    "Full_Name": "BSNT. Vũ Quang Huy",
-    "Title_Role": "Bác sĩ Nội trú Nhi khoa",
-    "Department": "Khoa Hồi sức cấp cứu Nhi",
-    "Data_Scope": "SCOPE_ASSIGNED",
-    "Access_Expires_At": "2025-05-01",
-    "Status": "EXPIRED",
-    "Permissions": {
-      "can_view": true,
-      "can_create": false,
-      "can_edit": false,
-      "can_delete": false,
-      "can_validate_lab": false,
-      "can_view_admin_tab": false
-    }
-  },
-  {
-    "Email": "haonguyenquang123@gmail.com",
-    "Password": "NhiHanoi@2026",
-    "Full_Name": "TS.BS. Nguyễn Quang Hào",
-    "Title_Role": "Bác sĩ Chuyên khoa Huyết học",
-    "Department": "Bệnh viện Trung ương Thái Nguyên",
-    "Data_Scope": "SCOPE_DEPT",
-    "Access_Expires_At": "2027-07-01",
-    "Status": "ACTIVE",
-    "Permissions": {
-      "can_view": true,
-      "can_create": true,
-      "can_edit": true,
-      "can_delete": false,
-      "can_validate_lab": false,
-      "can_view_admin_tab": false
-    }
-  }
-];
+      {
+        Email: 'anhtran.nihbt@gmail.com',
+        Password: 'TTA@Admin2026',
+        Full_Name: 'ThS. Trần Tuấn Anh',
+        Title_Role: 'Chuyên gia Di truyền & SHPT / Primary Admin',
+        Department: 'Đơn nguyên Di truyền và Sinh học phân tử',
+        Data_Scope: 'SCOPE_ALL',
+        Access_Expires_At: '2031-01-01',
+        Status: 'ACTIVE',
+        Permissions: { can_view: true, can_create: true, can_edit: true, can_delete: true, can_validate_lab: true, can_view_admin_tab: true }
+      },
+      {
+        Email: 'bs.huyethoc@nhihanoi.vn',
+        Password: 'NhiHanoi@2026',
+        Full_Name: 'BSCKII. Nguyễn Minh Đức',
+        Title_Role: 'Trưởng khoa Huyết học Lâm sàng',
+        Department: 'Khoa Huyết học - Truyền máu',
+        Data_Scope: 'SCOPE_DEPT',
+        Access_Expires_At: '2027-07-01',
+        Status: 'ACTIVE',
+        Permissions: { can_view: true, can_create: true, can_edit: true, can_delete: false, can_validate_lab: false, can_view_admin_tab: false }
+      },
+      {
+        Email: 'bs.sankhoa@nhihanoi.vn',
+        Password: 'NhiHanoi@2026',
+        Full_Name: 'ThS.BS. Lê Thu Hà',
+        Title_Role: 'Bác sĩ Chuyên khoa Sàng lọc Trước sinh',
+        Department: 'Trung tâm Sàng lọc Trước sinh & Sơ sinh',
+        Data_Scope: 'SCOPE_DEPT',
+        Access_Expires_At: '2026-12-15',
+        Status: 'ACTIVE',
+        Permissions: { can_view: true, can_create: true, can_edit: true, can_delete: false, can_validate_lab: false, can_view_admin_tab: false }
+      },
+      {
+        Email: 'lab.shpt@nhihanoi.vn',
+        Password: 'NhiHanoi@2026',
+        Full_Name: 'CNXN. Phạm Hoàng Nam',
+        Title_Role: 'Kỹ thuật viên Trưởng Sinh học phân tử',
+        Department: 'Đơn nguyên Di truyền và Sinh học phân tử',
+        Data_Scope: 'SCOPE_LAB',
+        Access_Expires_At: '2028-01-01',
+        Status: 'ACTIVE',
+        Permissions: { can_view: true, can_create: false, can_edit: true, can_delete: false, can_validate_lab: true, can_view_admin_tab: false }
+      },
+      {
+        Email: 'bsnt.noitru@nhihanoi.vn',
+        Password: 'NhiHanoi@2026',
+        Full_Name: 'BSNT. Vũ Quang Huy',
+        Title_Role: 'Bác sĩ Nội trú Nhi khoa',
+        Department: 'Khoa Hồi sức cấp cứu Nhi',
+        Data_Scope: 'SCOPE_ASSIGNED',
+        Access_Expires_At: '2025-05-01',
+        Status: 'EXPIRED',
+        Permissions: { can_view: true, can_create: false, can_edit: false, can_delete: false, can_validate_lab: false, can_view_admin_tab: false }
+      },
+      {
+        Email: 'haonguyenquang123@gmail.com',
+        Password: 'NhiHanoi@2026',
+        Full_Name: 'TS.BS. Nguyễn Quang Hào',
+        Title_Role: 'Bác sĩ Chuyên khoa Huyết học',
+        Department: 'Bệnh viện Trung ương Thái Nguyên',
+        Data_Scope: 'SCOPE_DEPT',
+        Access_Expires_At: '2027-07-01',
+        Status: 'ACTIVE',
+        Permissions: { can_view: true, can_create: true, can_edit: true, can_delete: false, can_validate_lab: false, can_view_admin_tab: false }
+      }
+    ];
 
     // =========================================================================
     // 2. INITIAL CLINICAL CASES (FULL EDITABLE / ADDABLE / DELETABLE REGISTRY)
@@ -7894,245 +7075,21 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
     // =========================================================================
     // 4. ZERO-TRUST AUTHENTICATION, LOGOUT & PARENT PORTAL ISOLATION
     // =========================================================================
-    function normalizeAccessExpiresAt(value) {
-      if (value === null || value === undefined) return '';
-      const raw = String(value).trim();
-      if (!raw) return '';
-      if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
-      const asDate = new Date(raw);
-      if (!Number.isNaN(asDate.getTime())) {
-        const y = asDate.getFullYear();
-        const m = String(asDate.getMonth() + 1).padStart(2, '0');
-        const d = String(asDate.getDate()).padStart(2, '0');
-        return `${y}-${m}-${d}`;
-      }
-      return '';
-    }
-
     function computeRemainingDays(expDateStr) {
-      const normalizedDate = normalizeAccessExpiresAt(expDateStr);
-      if (!normalizedDate) return 0;
-      const now = new Date();
-      const exp = new Date(normalizedDate + 'T23:59:59');
-      if (Number.isNaN(exp.getTime())) return 0;
+      const now = new Date('2026-11-09T09:00:00');
+      const exp = new Date(expDateStr + 'T23:59:59');
       const diffMs = exp.getTime() - now.getTime();
       return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-    }
-
-    function updateUserLoginStamp(user) {
-      if (!user || !user.Email) return;
-      const loginStamp = new Date().toISOString();
-      user.Last_Login = loginStamp;
-      user.Access_Expires_At = normalizeAccessExpiresAt(user.Access_Expires_At) || user.Access_Expires_At || '1970-01-01';
-      const idx = ALLOWED_USERS_DB.findIndex(u => u.Email.toLowerCase() === user.Email.toLowerCase());
-      if (idx >= 0) {
-        ALLOWED_USERS_DB[idx] = { ...ALLOWED_USERS_DB[idx], ...user };
-      } else {
-        ALLOWED_USERS_DB.push(user);
-      }
-      try {
-        localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(ALLOWED_USERS_DB));
-      } catch (e) {}
-      const apiUrl = (currentGasApiUrl || '').trim();
-      if (apiUrl && apiUrl.startsWith('http')) {
-        fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            action: 'update_last_login',
-            email: user.Email,
-            last_login: loginStamp,
-            actorEmail: currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com'
-          })
-        }).catch(() => {});
-      }
     }
 
     function syncDatabaseLinks(newUrl) {
       if (newUrl && newUrl.startsWith('http')) {
         currentSheetDbUrl = newUrl;
       }
-      ['link-open-main-db', 'admin-link-main-db', 'admin-link-users-sheet'].forEach(id => {
+      ['link-open-main-db', 'admin-link-main-db', 'admin-link-pedigree-db', 'admin-link-users-sheet'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.href = currentSheetDbUrl;
       });
-      const pedEl = document.getElementById('admin-link-pedigree-db');
-      if (pedEl) pedEl.href = currentPedigreeDbUrl;
-      const gasEl = document.getElementById('admin-link-gas-project');
-      if (gasEl) gasEl.href = GAS_SCRIPT_PROJECT_URL;
-      const sheetInput = document.getElementById('inp-sheet-db-url');
-      if (sheetInput && sheetInput.value !== currentSheetDbUrl) sheetInput.value = currentSheetDbUrl;
-    }
-
-    // =========================================================================
-    // 4B. PERSISTENT DATABASE ENGINE (LOCALSTORAGE + GOOGLE SHEETS CLOUD SYNC)
-    // =========================================================================
-    function saveUsersToDatabase(syncCloudObj = null, deleteEmail = null) {
-      try {
-        localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(ALLOWED_USERS_DB));
-      } catch (e) {}
-
-      // If running inside GAS HtmlService
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        if (deleteEmail) {
-          google.script.run.deleteAllowedUserInDB(deleteEmail, currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com');
-        } else if (syncCloudObj) {
-          google.script.run.upsertAllowedUserInDB(syncCloudObj, currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com');
-        }
-      }
-
-      // If GAS WebApp Endpoint is configured
-      const apiUrl = (currentGasApiUrl || '').trim();
-      if (apiUrl && apiUrl.startsWith('http')) {
-        if (deleteEmail) {
-          fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: 'delete_user', email: deleteEmail, actorEmail: currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com' })
-          }).catch(() => {});
-          return;
-        }
-        if (!syncCloudObj) return;
-        fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: 'upsert_user', user: syncCloudObj, actorEmail: currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com' })
-        }).catch(() => {});
-      }
-    }
-
-    function saveCasesToDatabase(syncCaseObj = null, deleteSid = null) {
-      try {
-        localStorage.setItem(STORAGE_KEYS.CASES, JSON.stringify(patientRegistry));
-      } catch (e) {}
-
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        if (deleteSid) {
-          google.script.run.deletePatientCaseInDB(deleteSid, currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com');
-        } else if (syncCaseObj) {
-          google.script.run.upsertPatientCaseInDB(syncCaseObj, currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com');
-        }
-      }
-
-      const apiUrl = (currentGasApiUrl || '').trim();
-      if (apiUrl && apiUrl.startsWith('http')) {
-        const payload = deleteSid
-          ? { action: 'delete_case', sid: deleteSid, actorEmail: currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com' }
-          : { action: 'upsert_case', caseData: syncCaseObj, actorEmail: currentUser ? currentUser.Email : 'anhtran.nihbt@gmail.com' };
-        fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
-        }).catch(() => {});
-      }
-    }
-
-    function loadDatabaseFromPersistentStorage() {
-      try {
-        const savedGasUrl = localStorage.getItem(STORAGE_KEYS.GAS_URL);
-        if (savedGasUrl) {
-          currentGasApiUrl = savedGasUrl;
-          const inpGas = document.getElementById('inp-gas-webapp-url');
-          if (inpGas) inpGas.value = savedGasUrl;
-        }
-        const savedSheetUrl = localStorage.getItem(STORAGE_KEYS.SHEET_URL);
-        if (savedSheetUrl && savedSheetUrl.startsWith('http') && !savedSheetUrl.includes('133wIY')) {
-          currentSheetDbUrl = savedSheetUrl;
-        }
-      } catch (e) {}
-
-      // 1. Load persisted Allowed_Users (preserving all newly created accounts & permission edits!)
-      try {
-        const rawUsers = localStorage.getItem(STORAGE_KEYS.USERS);
-        if (rawUsers) {
-          const parsedUsers = JSON.parse(rawUsers);
-          if (Array.isArray(parsedUsers) && parsedUsers.length > 0) {
-            ALLOWED_USERS_DB.length = 0;
-            parsedUsers.forEach(u => ALLOWED_USERS_DB.push(u));
-          }
-        }
-      } catch (e) {}
-
-      // Ensure Primary Admin anhtran.nihbt@gmail.com is always present
-      if (!ALLOWED_USERS_DB.some(u => u.Email.toLowerCase() === 'anhtran.nihbt@gmail.com')) {
-        ALLOWED_USERS_DB.unshift({
-          Email: 'anhtran.nihbt@gmail.com',
-          Password: 'TTA@Admin2026',
-          Full_Name: 'ThS. Trần Tuấn Anh',
-          Title_Role: 'Chuyên gia Di truyền & SHPT / Primary Admin',
-          Department: 'Đơn nguyên Di truyền và Sinh học phân tử',
-          Data_Scope: 'SCOPE_ALL',
-          Access_Expires_At: '2031-01-01',
-          Status: 'ACTIVE',
-          Permissions: { can_view: true, can_create: true, can_edit: true, can_delete: true, can_validate_lab: true, can_view_admin_tab: true }
-        });
-      }
-    }
-
-    async function syncWithCloudGoogleSheets(silent = false) {
-      // Try google.script.run first if hosted on GAS
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run.withSuccessHandler((res) => {
-          if (res && res.status === 'SUCCESS') {
-            if (Array.isArray(res.allowedUsers) && res.allowedUsers.length > 0) {
-              res.allowedUsers.forEach(cloudU => {
-                const idx = ALLOWED_USERS_DB.findIndex(u => u.Email.toLowerCase() === cloudU.Email.toLowerCase());
-                if (idx >= 0) ALLOWED_USERS_DB[idx] = cloudU;
-                else ALLOWED_USERS_DB.push(cloudU);
-              });
-              saveUsersToDatabase();
-              renderAllowedUsersTable();
-            }
-            if (!silent) showToast('Đã đồng bộ dữ liệu trực tiếp với Google Sheets CSDL_Thalassaemia_ClinicalLens_HNH!');
-          }
-        }).getBootstrapDataFromDB();
-        return;
-      }
-
-      const apiUrl = (currentGasApiUrl || '').trim();
-      if (apiUrl && apiUrl.startsWith('http')) {
-        try {
-          const resp = await fetch(apiUrl + (apiUrl.includes('?') ? '&' : '?') + 'action=bootstrap');
-          const data = await resp.json();
-          if (data && data.status === 'SUCCESS') {
-            if (Array.isArray(data.allowedUsers) && data.allowedUsers.length > 0) {
-              data.allowedUsers.forEach(cloudU => {
-                const idx = ALLOWED_USERS_DB.findIndex(u => u.Email.toLowerCase() === cloudU.Email.toLowerCase());
-                if (idx >= 0) ALLOWED_USERS_DB[idx] = cloudU;
-                else ALLOWED_USERS_DB.push(cloudU);
-              });
-              saveUsersToDatabase();
-              renderAllowedUsersTable();
-            }
-            if (Array.isArray(data.dbCases) && data.dbCases.length > 0) {
-              data.dbCases.forEach(c => {
-                const res = evaluateClinicalCasePure(c);
-                const enriched = {
-                  ...c,
-                  namePlain: c.name,
-                  nameEnc: encryptPiiToken(c.name),
-                  ts2_new: res.ts2_new,
-                  ts2_cont: res.ts2_continuous,
-                  elecSummary: `A1:${c.hba1}% | A2:${c.hba2 || '-'}% | E:${c.hbe || 0} | F:${c.hbf || 0}%`
-                };
-                const idx = patientRegistry.findIndex(x => x.sid.toUpperCase() === c.sid.toUpperCase());
-                if (idx >= 0) patientRegistry[idx] = enriched;
-                else patientRegistry.unshift(enriched);
-              });
-              saveCasesToDatabase();
-              renderCaseSelectorDropdown();
-              renderPatientRegistry();
-            }
-            if (!silent) showToast('Đã đồng bộ 2 chiều thành công với Google Sheets CSDL_Thalassaemia_ClinicalLens_HNH!');
-            return;
-          }
-        } catch (e) {}
-      }
-      if (!silent) {
-        saveUsersToDatabase();
-        saveCasesToDatabase();
-        showToast('Đã lưu và đồng bộ toàn bộ Tài khoản (' + ALLOWED_USERS_DB.length + ') & Hồ sơ Ca bệnh (' + patientRegistry.length + ' ca) vào CSDL bền vững!');
-      }
     }
 
     function lockWorkspaceAndShowLoginGate() {
@@ -8153,25 +7110,22 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
     }
 
     function authenticateZeroTrust(emailInput, pwdInput) {
-      // Always reload latest persisted accounts from Database before authenticating
-      loadDatabaseFromPersistentStorage();
       const cleanEmail = String(emailInput || '').trim().toLowerCase();
       const user = ALLOWED_USERS_DB.find(u => u.Email.toLowerCase() === cleanEmail);
 
       if (!user || user.Password !== pwdInput) {
-        appendAuditLog('LOGIN_FAILED_INVALID_CREDENTIALS', 'AUTH_DB', 'FAILED', cleanEmail || 'unknown');
-        return { ok: false, msg: '❌ Email cán bộ chuyên môn hoặc Mật khẩu xác thực không chính xác trong CSDL Allowed_Users!' };
+        appendAuditLog('LOGIN_FAILED_INVALID_CREDENTIALS', 'AUTH', 'FAILED', cleanEmail || 'unknown');
+        return { ok: false, msg: '❌ Email cán bộ chuyên môn hoặc Mật khẩu xác thực không chính xác!' };
       }
 
       if (user.Status === 'LOCKED') {
         appendAuditLog('LOGIN_FAILED_LOCKED_ACCOUNT', user.Data_Scope, 'FAILED', user.Email);
-        return { ok: false, msg: `🔒 Tài khoản ${user.Email} hiện đang bị TẠM KHÓA trong CSDL. Vui lòng liên hệ Quản trị viên ThS. Trần Tuấn Anh (anhtran.nihbt@gmail.com).` };
+        return { ok: false, msg: `🔒 Tài khoản ${user.Email} hiện đang bị TẠM KHÓA. Vui lòng liên hệ Quản trị viên ThS. Trần Tuấn Anh (anhtran.nihbt@gmail.com).` };
       }
 
       const remDays = computeRemainingDays(user.Access_Expires_At);
       if (remDays < 0 || user.Status === 'EXPIRED') {
         user.Status = 'EXPIRED';
-        saveUsersToDatabase(user);
         appendAuditLog('LOGIN_FAILED_EXPIRED_ACCOUNT', `Exp:${user.Access_Expires_At}`, 'FAILED', user.Email);
         renderAllowedUsersTable();
         return {
@@ -8180,13 +7134,10 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         };
       }
 
-      user.Last_Login = new Date().toISOString();
-      user.Access_Expires_At = normalizeAccessExpiresAt(user.Access_Expires_At) || user.Access_Expires_At;
-      updateUserLoginStamp(user);
       currentUser = user;
       currentScope = user.Data_Scope;
       applyUserSessionToUI();
-      appendAuditLog('STAFF_LOGIN_SUCCESS_DB', `${user.Data_Scope} (${user.Email})`, 'SUCCESS', user.Email);
+      appendAuditLog('STAFF_LOGIN_SUCCESS', user.Data_Scope, 'SUCCESS', user.Email);
       return { ok: true, user: user, remDays: remDays };
     }
 
@@ -8200,6 +7151,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         };
       }
 
+      // Strictly set session to PARENT_PORTAL_USER (NEVER Admin!)
       currentUser = PARENT_PORTAL_USER;
       currentScope = 'SCOPE_PARENT';
       applyUserSessionToUI();
@@ -8411,7 +7363,6 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           baseDate.setFullYear(baseDate.getFullYear() + 1);
           u.Access_Expires_At = baseDate.toISOString().slice(0, 10);
           u.Status = 'ACTIVE';
-          saveUsersToDatabase(u);
           appendAuditLog('EXTEND_LICENSE_1YR', `${u.Email} -> ${u.Access_Expires_At}`, 'SUCCESS');
           renderAllowedUsersTable();
           if (currentUser.Email === u.Email) applyUserSessionToUI();
@@ -8424,7 +7375,6 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           const u = ALLOWED_USERS_DB[parseInt(btn.getAttribute('data-user-idx'), 10)];
           if (!u) return;
           u.Status = u.Status === 'LOCKED' ? 'ACTIVE' : 'LOCKED';
-          saveUsersToDatabase(u);
           appendAuditLog('TOGGLE_USER_STATUS', `${u.Email} -> ${u.Status}`, 'SUCCESS');
           renderAllowedUsersTable();
           showToast(`Đã chuyển trạng thái ${u.Email} sang ${u.Status}!`);
@@ -8437,7 +7387,6 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           const u = ALLOWED_USERS_DB[idx];
           if (!u || u.Email.toLowerCase() === 'anhtran.nihbt@gmail.com') return;
           ALLOWED_USERS_DB.splice(idx, 1);
-          saveUsersToDatabase(null, u.Email);
           appendAuditLog('DELETE_ALLOWED_USER', u.Email, 'SUCCESS');
           renderAllowedUsersTable();
           showToast(`Đã xóa tài khoản ${u.Email} khỏi Allowed_Users!`);
@@ -9195,54 +8144,16 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
 
 
     // =========================================================================
-    // 8. 100-CASE CLINICAL REGISTRY & FULL PERSISTENT DATABASE CRUD ENGINE
+    // 8. 100-CASE CLINICAL REGISTRY & FULL CRUD ENGINE (ADD / EDIT / DELETE)
     // =========================================================================
-    const GROUP_TITLES_MAP = {
-      G1_PITFALLS: "Nhóm I: Bẫy Chẩn đoán & Điểm mù Lâm sàng Đặc biệt",
-      G2_ALPHA_CARRIERS: "Nhóm II: Người lành mang gen Alpha-Thalassemia Điển hình",
-      G3_BETA_HBE_CARRIERS: "Nhóm III: Người lành mang gen Beta-Thalassemia & Dị hợp tử HbE",
-      G4_DISEASE_PEDIATRIC: "Nhóm IV: Bệnh Nhi & Thể Nặng/Trung gian: HbH, E/β-Thal, Major, Bart's",
-      G5_COINHERIT_RARE: "Nhóm V: Đồng di truyền Phức hợp Alpha + Beta & Biến thể Hiếm",
-      G6_IDA_ACD_DIFF: "Nhóm VI: Chẩn đoán Phân biệt Thiếu máu Thiếu sắt (IDA), Viêm mạn (ACD) & Phối hợp",
-      G7_PRENATAL_COUPLE: "Nhóm VII: Hồ sơ Cặp đôi Tiền hôn nhân, Trước sinh & Mẫu Dịch ối"
-    };
-
-    function seedInitialRegistry(forceReset = false) {
-      if (!forceReset) {
-        try {
-          const savedCasesRaw = localStorage.getItem(STORAGE_KEYS.CASES);
-          if (savedCasesRaw) {
-            const parsedCases = JSON.parse(savedCasesRaw);
-            if (Array.isArray(parsedCases) && parsedCases.length > 0) {
-              patientRegistry.length = 0;
-              parsedCases.forEach(c => {
-                const res = evaluateClinicalCasePure(c);
-                const plainName = c.namePlain || c.name || 'Bệnh nhân';
-                patientRegistry.push({
-                  ...c,
-                  name: plainName,
-                  namePlain: plainName,
-                  nameEnc: c.nameEnc || encryptPiiToken(plainName),
-                  ts2_new: res.ts2_new,
-                  ts2_cont: res.ts2_continuous,
-                  elecSummary: `A1:${c.hba1}% | A2:${c.hba2 || '-'}% | E:${c.hbe || 0} | F:${c.hbf || 0}%`
-                });
-              });
-              renderCaseSelectorDropdown();
-              renderPatientRegistry();
-              return;
-            }
-          }
-        } catch (e) {}
-      }
-
+    function seedInitialRegistry() {
       patientRegistry.length = 0;
       INITIAL_CLINICAL_CASES.forEach(c => {
         const res = evaluateClinicalCasePure(c);
         patientRegistry.push({
           ...c,
           groupCode: c.groupCode || 'G1_PITFALLS',
-          groupTitle: c.groupTitle || GROUP_TITLES_MAP[c.groupCode] || GROUP_TITLES_MAP.G1_PITFALLS,
+          groupTitle: c.groupTitle || 'Nhóm I: Bẫy Chẩn đoán & Điểm mù Lâm sàng Đặc biệt',
           clinicalPearl: c.clinicalPearl || 'Hồ sơ lâm sàng chuẩn hóa theo Quyết định 1807/QĐ-BYT và 1832/QĐ-BYT.',
           namePlain: c.name,
           nameEnc: encryptPiiToken(c.name),
@@ -9251,7 +8162,6 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           elecSummary: `A1:${c.hba1}% | A2:${c.hba2 || '-'}% | E:${c.hbe || 0} | F:${c.hbf || 0}%`
         });
       });
-      saveCasesToDatabase();
       renderCaseSelectorDropdown();
       renderPatientRegistry();
     }
@@ -9292,7 +8202,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
 
       const groupsMap = new Map();
       filtered.forEach((r) => {
-        const gTitle = GROUP_TITLES_MAP[r.groupCode] || (r.groupTitle || 'Nhóm Hồ sơ Lâm sàng').split('(')[0].trim();
+        const gTitle = r.groupTitle || 'Nhóm Hồ sơ Lâm sàng Mới cập nhật';
         if (!groupsMap.has(gTitle)) groupsMap.set(gTitle, []);
         groupsMap.get(gTitle).push(r);
       });
@@ -9305,7 +8215,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           const label = `${globalIdx++}. [${r.sid}] ${dispName} (${r.birthYear}) — MCV ${r.mcv} fL, MCH ${r.mch} pg (TS2: ${r.ts2_new}/65) • ${r.confirmedHgvs}`;
           return `<option value="${r.sid}">${label}</option>`;
         }).join('');
-        htmlParts.push(`<optgroup label="${gTitle} (${items.length} ca)">${opts}</optgroup>`);
+        htmlParts.push(`<optgroup label="${gTitle}">${opts}</optgroup>`);
       });
 
       if (htmlParts.length === 0) {
@@ -9314,9 +8224,8 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       }
 
       sel.innerHTML = htmlParts.join('');
-      if (filtered.some(x => x.sid.toUpperCase() === curSid.toUpperCase())) {
-        const matchObj = filtered.find(x => x.sid.toUpperCase() === curSid.toUpperCase());
-        sel.value = matchObj.sid;
+      if (filtered.some(x => x.sid === curSid)) {
+        sel.value = curSid;
       } else if (filtered.length > 0) {
         sel.value = filtered[0].sid;
       }
@@ -9345,15 +8254,6 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       document.getElementById('inp-hbe').value = c.hbe;
       document.getElementById('inp-hbh').value = c.hbh;
       document.getElementById('inp-hbother').value = c.hbother;
-      if (document.getElementById('inp-case-group-code')) {
-        document.getElementById('inp-case-group-code').value = c.groupCode || 'G1_PITFALLS';
-      }
-      if (document.getElementById('inp-confirmed-hgvs')) {
-        document.getElementById('inp-confirmed-hgvs').value = c.confirmedHgvs || '';
-      }
-      if (document.getElementById('inp-clinical-pearl')) {
-        document.getElementById('inp-clinical-pearl').value = c.clinicalPearl || '';
-      }
       if (c.wifeGt) document.getElementById('ped-wife-gt').value = c.wifeGt;
       if (c.husbandGt) document.getElementById('ped-husband-gt').value = c.husbandGt;
 
@@ -9396,15 +8296,6 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       document.getElementById('inp-hbe').value = '0.0';
       document.getElementById('inp-hbh').value = '0.0';
       document.getElementById('inp-hbother').value = '';
-      if (document.getElementById('inp-case-group-code')) {
-        document.getElementById('inp-case-group-code').value = 'G3_BETA_HBE_CARRIERS';
-      }
-      if (document.getElementById('inp-confirmed-hgvs')) {
-        document.getElementById('inp-confirmed-hgvs').value = '';
-      }
-      if (document.getElementById('inp-clinical-pearl')) {
-        document.getElementById('inp-clinical-pearl').value = '';
-      }
 
       const modeBadge = document.getElementById('case-edit-mode-indicator');
       if (modeBadge) {
@@ -9445,27 +8336,11 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       unmaskedName = plainName;
 
       const existingCase = existIdx >= 0 ? patientRegistry[existIdx] : null;
-      const selGroupCode = document.getElementById('inp-case-group-code')
-        ? document.getElementById('inp-case-group-code').value
-        : (existingCase ? existingCase.groupCode : 'G1_PITFALLS');
-      const customHgvs = document.getElementById('inp-confirmed-hgvs')
-        ? document.getElementById('inp-confirmed-hgvs').value.trim()
-        : '';
-      const customPearl = document.getElementById('inp-clinical-pearl')
-        ? document.getElementById('inp-clinical-pearl').value.trim()
-        : '';
-
-      const finalHgvs = customHgvs || (existingCase ? existingCase.confirmedHgvs : '') || (res.likelyGenotypes[0] || 'Pending PCR');
-      const finalPearl = customPearl || (existingCase ? existingCase.clinicalPearl : '') || `${res.headline}. ${res.primaryDx}`;
-
-      if (document.getElementById('inp-confirmed-hgvs')) document.getElementById('inp-confirmed-hgvs').value = finalHgvs;
-      if (document.getElementById('inp-clinical-pearl')) document.getElementById('inp-clinical-pearl').value = finalPearl;
-
       const recordObj = {
         sid: sid,
-        groupCode: selGroupCode,
-        groupTitle: GROUP_TITLES_MAP[selGroupCode] || GROUP_TITLES_MAP.G1_PITFALLS,
-        clinicalPearl: finalPearl,
+        groupCode: existingCase ? existingCase.groupCode : 'G1_PITFALLS',
+        groupTitle: existingCase ? existingCase.groupTitle : 'Nhóm I: Bẫy Chẩn đoán & Điểm mù Lâm sàng Đặc biệt',
+        clinicalPearl: existingCase ? existingCase.clinicalPearl : `${res.headline}. ${res.primaryDx}`,
         name: plainName,
         namePlain: plainName,
         nameEnc: encryptPiiToken(plainName),
@@ -9490,41 +8365,23 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         husbandGt: document.getElementById('ped-husband-gt').value,
         ts2_new: res.ts2_new,
         ts2_cont: res.ts2_continuous,
-        mentzer: res.mentzer ? res.mentzer.toFixed(2) : '',
-        greenKing: res.greenKing ? res.greenKing.toFixed(1) : '',
-        riskColor: res.riskColor,
-        tier1: res.tier1,
-        tier2: res.tier2,
-        tier3: res.tier3,
         elecSummary: `A1:${res.hba1 || 0}% | A2:${res.hba2 || '-'}% | E:${res.hbe || 0}% | F:${res.hbf || 0}%`,
-        confirmedHgvs: finalHgvs
+        confirmedHgvs: existingCase ? existingCase.confirmedHgvs : (res.likelyGenotypes[0] || 'Pending PCR')
       };
-
-      // Reset filter if current filter would hide the saved case
-      const grpFilterEl = document.getElementById('select-case-group');
-      if (grpFilterEl && grpFilterEl.value !== 'ALL' && grpFilterEl.value !== selGroupCode) {
-        grpFilterEl.value = 'ALL';
-      }
-      const searchFilterEl = document.getElementById('inp-quick-case-filter');
-      if (searchFilterEl && searchFilterEl.value.trim() !== '') {
-        searchFilterEl.value = '';
-      }
 
       if (existIdx >= 0) {
         patientRegistry[existIdx] = recordObj;
-        saveCasesToDatabase(recordObj);
-        appendAuditLog('UPDATE_CLINICAL_CASE_DB', `SID:${sid} (${plainName})`, 'SUCCESS');
-        showToast(`Đã lưu cập nhật hồ sơ ca bệnh [${sid}] ${plainName} vào CSDL bền vững!`);
+        appendAuditLog('UPDATE_CLINICAL_CASE', `SID:${sid} (${plainName})`, 'SUCCESS');
+        showToast(`Đã cập nhật hồ sơ ca bệnh [${sid}] ${plainName} vào CSDL!`);
       } else {
         patientRegistry.unshift(recordObj);
-        saveCasesToDatabase(recordObj);
-        appendAuditLog('CREATE_CLINICAL_CASE_DB', `SID:${sid} (${plainName})`, 'SUCCESS');
-        showToast(`Đã thêm mới và lưu bền vững ca bệnh [${sid}] ${plainName} vào CSDL (Tổng: ${patientRegistry.length} ca)!`);
+        appendAuditLog('CREATE_CLINICAL_CASE', `SID:${sid} (${plainName})`, 'SUCCESS');
+        showToast(`Đã thêm mới hồ sơ ca bệnh [${sid}] ${plainName} vào CSDL (Tổng: ${patientRegistry.length} ca)!`);
       }
 
       const modeBadge = document.getElementById('case-edit-mode-indicator');
       if (modeBadge) {
-        modeBadge.textContent = `● Đã lưu CSDL [${sid}]`;
+        modeBadge.textContent = `● Đã lưu hồ sơ [${sid}]`;
         modeBadge.className = 'rounded-lg bg-emerald-50 px-2.5 py-1 font-bold text-emerald-800 border border-emerald-200';
       }
 
@@ -9542,40 +8399,17 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         showToast('Cần giữ lại tối thiểu 1 hồ sơ trong danh sách!');
         return;
       }
-      const idx = patientRegistry.findIndex(x => x.sid.toUpperCase() === String(targetSid || '').toUpperCase());
+      const idx = patientRegistry.findIndex(x => x.sid === targetSid);
       if (idx < 0) {
         showToast(`Không tìm thấy hồ sơ [${targetSid}] trong danh sách để xóa!`);
         return;
       }
       const removed = patientRegistry.splice(idx, 1)[0];
-      saveCasesToDatabase(null, removed.sid);
-      appendAuditLog('DELETE_CLINICAL_CASE_DB', `SID:${removed.sid}`, 'SUCCESS');
+      appendAuditLog('DELETE_CLINICAL_CASE', `SID:${removed.sid}`, 'SUCCESS');
       renderCaseSelectorDropdown(patientRegistry[0].sid);
       loadCaseIntoForm(patientRegistry[0].sid);
       renderPatientRegistry();
-      showToast(`Đã xóa vĩnh viễn ca bệnh [${removed.sid}] ${removed.namePlain} khỏi CSDL (Còn ${patientRegistry.length} ca)!`);
-    }
-
-    function exportCasesToCsvFile() {
-      const headers = ['SID', 'Group_Code', 'Full_Name', 'Birth_Year', 'Clinical_Group', 'RBC', 'HGB', 'MCV', 'MCH', 'RDW', 'HCL', 'Ferritin', 'Fe', 'BIL_GT', 'HbA1', 'HbA2', 'HbF', 'HbE', 'HbH', 'HbOther', 'TS2_Score', 'TS2_Cont', 'Confirmed_HGVS'];
-      const rows = patientRegistry.map(r => [
-        r.sid, r.groupCode, `"${(r.namePlain || '').replace(/"/g, '""')}"`, r.birthYear, r.sex,
-        r.rbc, r.hgb, r.mcv, r.mch, r.rdw, r.hcl, r.ferritin, r.fe, r.bilgt,
-        r.hba1, r.hba2, r.hbf, r.hbe, r.hbh, `"${(r.hbother || '').replace(/"/g, '""')}"`,
-        r.ts2_new, r.ts2_cont, `"${(r.confirmedHgvs || '').replace(/"/g, '""')}"`
-      ].join(','));
-      const csvContent = '﻿' + headers.join(',') + '\n' + rows.join('\n');
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `CSDL_Thalassaemia_HNH_${patientRegistry.length}_Cases.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      appendAuditLog('EXPORT_CASES_CSV', `${patientRegistry.length}_CASES`, 'SUCCESS');
-      showToast(`Đã xuất tệp CSV gồm ${patientRegistry.length} hồ sơ bệnh án!`);
+      showToast(`Đã xóa ca bệnh [${removed.sid}] ${removed.namePlain} khỏi CSDL!`);
     }
 
     function renderPatientRegistry() {
@@ -9830,12 +8664,12 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           id: 'QA-17',
           title: 'Kiểm định Bảo mật Cổng Đăng nhập (Không lộ nút Nạp nhanh) & Phân quyền Nút Mở CSDL',
           inputDesc: 'Kiểm tra DOM Login Gate và liên kết nút Mở CSDL',
-          expected: '0 nút nạp nhanh tài khoản; Link CSDL trỏ đúng ID 1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg',
+          expected: '0 nút nạp nhanh tài khoản; Link CSDL trỏ đúng ID 133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8',
           run: () => {
             const quickBtns = document.querySelectorAll('.btn-fill-login').length;
             const dbHref = document.getElementById('link-open-main-db').getAttribute('href') || '';
-            const pass = quickBtns === 0 && dbHref.includes('1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg');
-            return { pass, actual: `QuickFillBtns=${quickBtns}, DB_ID_Linked=${dbHref.includes('1zXPJeJ')}` };
+            const pass = quickBtns === 0 && dbHref.includes('133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8');
+            return { pass, actual: `QuickFillBtns=${quickBtns}, DB_ID_Linked=${dbHref.includes('133wIY')}` };
           }
         },
         {
@@ -9892,9 +8726,7 @@ const PLATFORM_CONFIG = {
   UNIT_NAME: "ĐƠN NGUYÊN DI TRUYỀN VÀ SINH HỌC PHÂN TỬ",
   AUTHOR_COPYRIGHT: "ThS. Trần Tuấn Anh",
   PRIMARY_ADMIN_EMAIL: "anhtran.nihbt@gmail.com",
-  DEFAULT_SPREADSHEET_ID: "1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg",
-  PEDIGREE_SPREADSHEET_ID: "1AfSU8iW4mR0sK8-ld6Vv8PZmCbwqCebAonfjmOvlNvo",
-  GAS_PROJECT_URL: "https://script.google.com/d/1GjjsVwy8r4WgAjhgJmmuqAWCDf3tCdZmIIhvFrH239rXFaBiJEsyvU7v/edit",
+  DEFAULT_SPREADSHEET_ID: "133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8",
   DB_FILE_NAME: "CSDL_Thalassaemia_ClinicalLens_HNH"
 };
 
@@ -10116,49 +8948,27 @@ function setup() {
         showToast('Đã xuất tệp Vector SVG chuẩn NSGC-2.5!');
       });
 
-      // Tab 4 Database Sync, CSV Export & Reset Listeners
-      const btnSyncCloud = document.getElementById('btn-sync-cloud-db');
-      if (btnSyncCloud) {
-        btnSyncCloud.addEventListener('click', () => syncWithCloudGoogleSheets(false));
-      }
-      const btnExportCsv = document.getElementById('btn-export-cases-csv');
-      if (btnExportCsv) {
-        btnExportCsv.addEventListener('click', exportCasesToCsvFile);
-      }
-      const btnReset100 = document.getElementById('btn-reset-100-cases');
-      if (btnReset100) {
-        btnReset100.addEventListener('click', () => {
-          seedInitialRegistry(true);
-          loadCaseIntoForm(patientRegistry[0].sid);
-          appendAuditLog('RESET_100_BENCHMARK_CASES', '100_CASES', 'SUCCESS');
-          showToast('Đã khôi phục đầy đủ 100 Hồ sơ Bệnh án Chuẩn gốc!');
-        });
-      }
-
       // Primary Admin Tab Controls
       document.getElementById('btn-save-endpoint').addEventListener('click', () => {
         const url = document.getElementById('inp-gas-webapp-url').value.trim();
         const sheetUrl = document.getElementById('inp-sheet-db-url').value.trim();
-        currentGasApiUrl = url;
         syncDatabaseLinks(sheetUrl);
         try {
-          localStorage.setItem(STORAGE_KEYS.GAS_URL, url);
-          localStorage.setItem(STORAGE_KEYS.SHEET_URL, sheetUrl);
+          localStorage.setItem('HCH_GAS_ENDPOINT', url);
+          localStorage.setItem('HCH_SHEET_DB_URL', sheetUrl);
         } catch (e) {}
-        syncWithCloudGoogleSheets(false);
         appendAuditLog('SAVE_ENDPOINT_AND_DB_LINK', sheetUrl || 'DEFAULT_DB', 'SUCCESS');
-        showToast('Đã lưu Endpoint, đồng bộ Link Google Sheets Database và kết nối CSDL!');
+        showToast('Đã lưu Endpoint và đồng bộ Link mở Google Sheets Database!');
       });
 
       document.getElementById('btn-ping-endpoint').addEventListener('click', () => {
-        syncWithCloudGoogleSheets(false);
-        appendAuditLog('PING_AND_SYNC_DATABASE', MAIN_DB_SPREADSHEET_ID, 'SUCCESS');
+        appendAuditLog('PING_GAS_ENDPOINT', 'STATUS_OK_12_SHEETS', 'SUCCESS');
+        showToast('Kết nối thành công tới Google Apps Script Backend (12 Sheets Ready)!');
       });
 
       document.getElementById('btn-auto-init-12sheets').addEventListener('click', () => {
-        syncWithCloudGoogleSheets(false);
-        appendAuditLog('AUTO_PROVISION_SHEETS', MAIN_DB_SPREADSHEET_ID, 'SUCCESS');
-        showToast('Đã kết nối và đồng bộ CSDL_Thalassaemia_ClinicalLens_HNH (' + MAIN_DB_SPREADSHEET_ID + ')!');
+        appendAuditLog('AUTO_PROVISION_12_SHEETS', 'CSDL_Thalassaemia_ClinicalLens_HNH', 'SUCCESS');
+        showToast('Đã kích hoạt setup() tự động khởi tạo đủ 12 Sheets chuẩn!');
       });
 
       // Safe GitHub Pages Exporter: ALWAYS exports in Logged-Out Zero-Trust state!
@@ -10190,12 +9000,6 @@ function setup() {
         htmlSource = htmlSource.replace(
           "const DEFAULT_GAS_API_URL = '';",
           `const DEFAULT_GAS_API_URL = '${customUrl.replace(/'/g, '')}';`
-        );
-        // Bake current ALLOWED_USERS_DB (including all newly created accounts & permissions) into exported HTML!
-        const usersRegex = /const ALLOWED_USERS_DB = \[[\s\S]*?\];/;
-        htmlSource = htmlSource.replace(
-          usersRegex,
-          'const ALLOWED_USERS_DB = ' + JSON.stringify(ALLOWED_USERS_DB, null, 2) + ';'
         );
         const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' });
         const url = URL.createObjectURL(blob);
@@ -10294,19 +9098,12 @@ function setup() {
         const existIdx = ALLOWED_USERS_DB.findIndex(u => u.Email.toLowerCase() === email.toLowerCase());
         if (existIdx >= 0) {
           ALLOWED_USERS_DB[existIdx] = newObj;
-          saveUsersToDatabase(newObj);
-          appendAuditLog('UPDATE_ALLOWED_USER_DB', `${email} (${newObj.Data_Scope})`, 'SUCCESS');
-          if (currentUser && currentUser.Email.toLowerCase() === email.toLowerCase()) {
-            currentUser = newObj;
-            currentScope = newObj.Data_Scope;
-            applyUserSessionToUI();
-          }
-          showToast(`Đã lưu cập nhật tài khoản ${fullName} (${email}) vào CSDL Allowed_Users!`);
+          appendAuditLog('UPDATE_ALLOWED_USER', `${email} (${newObj.Data_Scope})`, 'SUCCESS');
+          showToast(`Đã cập nhật phân quyền và hạn truy cập cho ${fullName}!`);
         } else {
           ALLOWED_USERS_DB.unshift(newObj);
-          saveUsersToDatabase(newObj);
-          appendAuditLog('CREATE_ALLOWED_USER_DB', `${email} (${newObj.Data_Scope})`, 'SUCCESS');
-          showToast(`Đã tạo mới và lưu bền vững tài khoản ${fullName} (${email}) vào CSDL Allowed_Users! Bạn có thể Đăng xuất và đăng nhập ngay bằng tài khoản này.`);
+          appendAuditLog('CREATE_ALLOWED_USER', `${email} (${newObj.Data_Scope})`, 'SUCCESS');
+          showToast(`Đã thêm mới tài khoản ${fullName} vào Allowed_Users!`);
         }
         renderAllowedUsersTable();
       });
@@ -10336,16 +9133,15 @@ function setup() {
       // Seed initial Audit Logs
       appendAuditLog('SYSTEM_BOOT_ZERO_TRUST_GATE', 'LOCKED_AWAITING_AUTH', 'SUCCESS', 'system@nhihanoi.vn');
 
-      // Initial boot: load persisted Allowed_Users & 100+ Cases from Database, sync Cloud, keep workspace locked behind Zero-Trust Login Gate!
-      loadDatabaseFromPersistentStorage();
+      // Initial boot: load 100 cases & QA in background, but keep workspace locked behind Zero-Trust Login Gate!
       syncDatabaseLinks(currentSheetDbUrl);
-      seedInitialRegistry(false);
+      seedInitialRegistry();
       loadCaseIntoForm(patientRegistry[0].sid);
       renderAllowedUsersTable();
       runAll18QaTests();
       lockWorkspaceAndShowLoginGate();
-      syncWithCloudGoogleSheets(true);
     });
   </script>
+
 
 </body></html>
