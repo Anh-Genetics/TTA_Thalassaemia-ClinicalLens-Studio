@@ -69,9 +69,9 @@
 <body class="min-h-screen flex flex-col bg-slate-100 text-slate-900">
 
   <!-- Toast Notification Banner -->
-  <div id="app-toast" class="fixed top-4 right-4 z-50 max-w-md rounded-xl border border-cyan-400 bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-2xl transition-all hidden">
+  <div id="app-toast" class="fixed top-4 right-4 z-50 max-w-md rounded-xl border border-cyan-400 bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-2xl transition-all">
     <div class="flex items-center justify-between gap-3">
-      <span id="app-toast-msg">Đăng nhập thành công: ThS. Trần Tuấn Anh (SCOPE_ALL • Còn 1515 ngày)</span>
+      <span id="app-toast-msg">Đã lưu Endpoint và đồng bộ Link mở Google Sheets Database!</span>
       <button id="btn-close-toast" type="button" class="text-cyan-300 hover:text-white text-xs font-bold px-2 py-0.5 rounded">ĐÓNG</button>
     </div>
   </div>
@@ -4149,6 +4149,28 @@
             </thead>
             <tbody id="tbody-audit-logs" class="divide-y divide-slate-100 font-mono text-[11px]">
         <tr class="hover:bg-slate-50">
+          <td class="p-2.5 text-slate-500">14:34:35 2026-11-11</td>
+          <td class="p-2.5 font-bold text-[#06394c]">anhtran.nihbt@gmail.com</td>
+          <td class="p-2.5 font-bold text-slate-800">SAVE_ENDPOINT_AND_DB_LINK</td>
+          <td class="p-2.5 text-slate-700">https://docs.google.com/spreadsheets/d/133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8/edit</td>
+          <td class="p-2.5">
+            <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800">SUCCESS</span>
+          </td>
+          <td class="p-2.5 text-emerald-700 font-mono">153104bab80095ed</td>
+        </tr>
+      
+        <tr class="hover:bg-slate-50">
+          <td class="p-2.5 text-slate-500">14:28:57 2026-11-11</td>
+          <td class="p-2.5 font-bold text-[#06394c]">anhtran.nihbt@gmail.com</td>
+          <td class="p-2.5 font-bold text-slate-800">EXPORT_GITHUB_INDEX_HTML_ZERO_TRUST</td>
+          <td class="p-2.5 text-slate-700">https://script.google.com/macros/s/AKfycbwtlqPO43JOidJhKNeRHAehiqheQvEo5dgutq1ojA-LA_lIjzME9BHQZU91JRq-KE6LDA/exec</td>
+          <td class="p-2.5">
+            <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800">SUCCESS</span>
+          </td>
+          <td class="p-2.5 text-emerald-700 font-mono">3049c97785f4dd00</td>
+        </tr>
+      
+        <tr class="hover:bg-slate-50">
           <td class="p-2.5 text-slate-500">14:28:18 2026-11-11</td>
           <td class="p-2.5 font-bold text-[#06394c]">anhtran.nihbt@gmail.com</td>
           <td class="p-2.5 font-bold text-slate-800">STAFF_LOGIN_SUCCESS</td>
@@ -4194,7 +4216,7 @@
     // =========================================================================
     // 0. DEFAULT GOOGLE APPS SCRIPT API ENDPOINT & GOOGLE SHEETS URL
     // =========================================================================
-    const DEFAULT_GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwtlqPO43JOidJhKNeRHAehiqheQvEo5dgutq1ojA-LA_lIjzME9BHQZU91JRq-KE6LDA/exec';
+    const DEFAULT_GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwKYG9nNwUVFI8O34RdyPJo7CzIC0lYzIh4-71Wzbuh4qxnwd9RqSev7Yb2Upp_hRal3Q/exec';
     let currentSheetDbUrl = 'https://docs.google.com/spreadsheets/d/133wIY_agfPHAGx2NRr01oyot2ssmPSd54xEcvf21iX8/edit';
 
     // =========================================================================
