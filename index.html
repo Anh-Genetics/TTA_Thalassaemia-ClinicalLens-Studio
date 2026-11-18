@@ -921,7 +921,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
   <!-- Toast Notification Banner -->
   <div id="app-toast" class="fixed top-4 right-4 z-50 max-w-md rounded-xl border border-cyan-400 bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-2xl transition-all hidden">
     <div class="flex items-center justify-between gap-3">
-      <span id="app-toast-msg">Đăng nhập thành công: ThS. Trần Tuấn Anh (SCOPE_ALL • Còn 99999 ngày)</span>
+      <span id="app-toast-msg">Đã lưu Endpoint, đồng bộ Link Google Sheets Database và kết nối CSDL!</span>
       <button id="btn-close-toast" type="button" class="text-cyan-300 hover:text-white text-xs font-bold px-2 py-0.5 rounded">ĐÓNG</button>
     </div>
   </div>
@@ -1153,7 +1153,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           </div>
 
           <!-- STRICTLY HIDDEN BY DEFAULT - ONLY SHOWN AFTER ADMIN LOGIN (SCOPE_ALL) -->
-          <a id="link-open-main-db" href="https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit" target="_blank" rel="noopener" class="rounded-lg bg-amber-400 px-2.5 py-1 text-[11px] font-black text-slate-950 shadow hover:bg-amber-300 transition hidden">
+          <a id="link-open-main-db" href="https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit?gid=0#gid=0" target="_blank" rel="noopener" class="rounded-lg bg-amber-400 px-2.5 py-1 text-[11px] font-black text-slate-950 shadow hover:bg-amber-300 transition hidden">
             📂 Mở CSDL_Thalassaemia_ClinicalLens_HNH
           </a>
 
@@ -1223,7 +1223,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           <!-- Segmented Switcher: Routine Patients DB vs 100 Sample Benchmark DB -->
           <div class="inline-flex rounded-xl bg-slate-100 p-0.5 border border-slate-300">
             <button id="btn-switch-db-routine" type="button" class="rounded-lg bg-[#084459] px-2.5 py-1 text-[11px] font-extrabold text-white shadow-sm transition">
-              🏥 Ca bệnh Thường quy (<span id="badge-routine-cases-count">3</span>)
+              🏥 Ca bệnh Thường quy (<span id="badge-routine-cases-count">4</span>)
             </button>
             <button id="btn-switch-db-sample" type="button" class="rounded-lg px-2.5 py-1 text-[11px] font-bold text-slate-700 hover:text-slate-950 transition">
               📚 Kho 100 Ca Mẫu Chuẩn (<span id="badge-total-cases-count">100</span>)
@@ -1265,7 +1265,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       <!-- Row 2: Compact Case Dropdown + Inline Clinical Pearl Summary Strip -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-2 items-center">
         <div class="lg:col-span-6">
-          <select id="select-preset-case" aria-label="Chọn hồ sơ bệnh án đang xử lý" class="w-full rounded-lg border border-[#084459] bg-sky-50/40 px-2.5 py-1 text-[11px] font-extrabold text-[#06394c] focus:outline-none"><optgroup label="Nhóm I: Bẫy Chẩn đoán &amp; Điểm mù Lâm sàng Đặc biệt (1 ca)"><option value="BN-261118-001">1. 🏥 [THƯỜNG QUY] [BN-261118-001] Nguyễn Thị Mai Anh (1999) — MCV 65.8 fL, MCH 18.5 pg (TS2: 44/65) • NG_000006.1:g.26264_45564del19301 (--SEA/αα)</option></optgroup><optgroup label="Nhóm IV: Bệnh Nhi &amp; Thể Nặng/Trung gian: HbH, E/β-Thal, Major, Bart's (1 ca)"><option value="BN-261118-002">2. 🏥 [THƯỜNG QUY] [BN-261118-002] Trần Gia Bảo (2024) — MCV 59.5 fL, MCH 17.6 pg (TS2: 53/65) • HBB:c.52A&gt;T / HBB:c.79G&gt;A (CD17 / CD26 - β0-Thal/HbE)</option></optgroup><optgroup label="Nhóm V: Đồng di truyền Phức hợp Alpha + Beta &amp; Biến thể Hiếm (1 ca)"><option value="BN-261118-003">3. 🏥 [THƯỜNG QUY] [BN-261118-003] Lê Hoàng Minh (1996) — MCV 73.2 fL, MCH 23.4 pg (TS2: 21/65) • NG_000006.1:g.26264_45564del19301 // HBB:c.52A&gt;T (--SEA/αα // CD17/βA)</option></optgroup></select>
+          <select id="select-preset-case" aria-label="Chọn hồ sơ bệnh án đang xử lý" class="w-full rounded-lg border border-[#084459] bg-sky-50/40 px-2.5 py-1 text-[11px] font-extrabold text-[#06394c] focus:outline-none"><optgroup label="Nhóm III: Người lành mang gen Beta-Thalassemia &amp; Dị hợp tử HbE (1 ca)"><option value="HCH-85369">1. 🏥 [THƯỜNG QUY] [HCH-85369] Văn A (1995) — MCV 71.1 fL, MCH 22.6 pg (TS2: 26/65) • --SEA / αα (NG_000006.1:g.26264_45564del19301)</option></optgroup><optgroup label="Nhóm I: Bẫy Chẩn đoán &amp; Điểm mù Lâm sàng Đặc biệt (1 ca)"><option value="BN-261118-001">2. 🏥 [THƯỜNG QUY] [BN-261118-001] Nguyễn Thị Mai Anh (1999) — MCV 65.8 fL, MCH 18.5 pg (TS2: 44/65) • NG_000006.1:g.26264_45564del19301 (--SEA/αα)</option></optgroup><optgroup label="Nhóm IV: Bệnh Nhi &amp; Thể Nặng/Trung gian: HbH, E/β-Thal, Major, Bart's (1 ca)"><option value="BN-261118-002">3. 🏥 [THƯỜNG QUY] [BN-261118-002] Trần Gia Bảo (2024) — MCV 59.5 fL, MCH 17.6 pg (TS2: 53/65) • HBB:c.52A&gt;T / HBB:c.79G&gt;A (CD17 / CD26 - β0-Thal/HbE)</option></optgroup><optgroup label="Nhóm V: Đồng di truyền Phức hợp Alpha + Beta &amp; Biến thể Hiếm (1 ca)"><option value="BN-261118-003">4. 🏥 [THƯỜNG QUY] [BN-261118-003] Lê Hoàng Minh (1996) — MCV 73.2 fL, MCH 23.4 pg (TS2: 21/65) • NG_000006.1:g.26264_45564del19301 // HBB:c.52A&gt;T (--SEA/αα // CD17/βA)</option></optgroup></select>
         </div>
         <div id="active-case-pearl-box" class="lg:col-span-6 rounded-lg border border-sky-200 bg-gradient-to-r from-sky-50 via-white to-teal-50 px-2.5 py-1 text-[11px] text-slate-800 flex flex-wrap items-center justify-between gap-1.5">
           <div class="flex flex-wrap items-center gap-1.5 truncate">
@@ -2227,7 +2227,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs">
           <div class="flex flex-wrap items-center gap-2">
             <button id="btn-reg-tab-routine" type="button" class="rounded-xl bg-[#084459] px-4 py-2 font-black text-white shadow-sm transition">
-              🏥 1. Bảng Bệnh nhân Thường quy (`Patients_Cases`: <span id="tab4-routine-count">3</span> ca)
+              🏥 1. Bảng Bệnh nhân Thường quy (`Patients_Cases`: <span id="tab4-routine-count">4</span> ca)
             </button>
             <button id="btn-reg-tab-sample" type="button" class="rounded-xl bg-white border border-slate-300 px-4 py-2 font-bold text-slate-700 hover:bg-slate-100 transition">
               📚 2. Bảng 100 Ca bệnh Mẫu Tham chiếu (`Sample_Benchmark_Cases`: <span id="tab4-sample-count">100</span> ca)
@@ -2251,6 +2251,27 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               </tr>
             </thead>
             <tbody id="tbody-patient-registry" class="divide-y divide-slate-200">
+          <tr class="hover:bg-slate-50">
+            <td class="p-2.5 font-mono font-bold text-[#084459]">HCH-85369</td>
+            <td class="p-2.5">
+              <div class="font-semibold text-slate-900">Văn A</div>
+              <div class="text-[10px] font-bold text-slate-500">Nhóm III: Người lành mang gen Beta-Thalassemia &amp; Dị hợp tử HbE</div>
+            </td>
+            <td class="p-2.5 font-mono text-[11px] text-slate-500">ENCv1$24d0a2c1$5f0a420...</td>
+            <td class="p-2.5 font-semibold">71.1 fL / 22.6 pg</td>
+            <td class="p-2.5"><span class="rounded bg-sky-100 px-2 py-0.5 font-extrabold text-[#06394c]">26/65</span> <span class="text-slate-400 text-[11px]">(28.1)</span></td>
+            <td class="p-2.5 text-slate-700">A1:97.7% | A2:Mon Mar 02 2026 00:00:00 GMT+0700 (Indochina Time)% | E:0.0 | F:0%</td>
+            <td class="p-2.5 font-mono text-xs font-bold text-rose-700">--SEA / αα (NG_000006.1:g.26264_45564del19301)</td>
+            <td class="p-2.5 text-right space-x-1 whitespace-nowrap">
+              <button type="button" data-loadsid="HCH-85369" class="btn-load-registry rounded-lg bg-sky-50 px-2.5 py-1 text-xs font-bold text-[#084459] border border-sky-200 hover:bg-sky-100">
+                ✎ Nạp / Sửa
+              </button>
+              <button type="button" data-delsid="HCH-85369" class="btn-del-registry rounded-lg bg-rose-50 px-2.5 py-1 text-xs font-bold text-rose-700 border border-rose-200 hover:bg-rose-100">
+                🗑 Xóa
+              </button>
+            </td>
+          </tr>
+        
           <tr class="hover:bg-slate-50">
             <td class="p-2.5 font-mono font-bold text-[#084459]">BN-261118-001</td>
             <td class="p-2.5">
@@ -2648,7 +2669,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         </div>
 
         <div class="mt-4 flex flex-wrap gap-2 text-xs">
-          <a id="admin-link-main-db" href="https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit" target="_blank" rel="noopener" class="rounded-xl bg-emerald-600 px-3.5 py-2 font-extrabold text-white hover:bg-emerald-500 transition">
+          <a id="admin-link-main-db" href="https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit?gid=0#gid=0" target="_blank" rel="noopener" class="rounded-xl bg-emerald-600 px-3.5 py-2 font-extrabold text-white hover:bg-emerald-500 transition">
             🔗 Mở Trực Tiếp Database [CSDL_Thalassaemia_ClinicalLens_HNH] ↗
           </a>
           <a id="admin-link-pedigree-db" href="https://docs.google.com/spreadsheets/d/1AfSU8iW4mR0sK8-ld6Vv8PZmCbwqCebAonfjmOvlNvo/edit" target="_blank" rel="noopener" class="rounded-xl bg-teal-700 px-3.5 py-2 font-extrabold text-white hover:bg-teal-600 transition">
@@ -2770,7 +2791,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             <p class="text-[11px] text-cyan-100">Đồng bộ chuẩn Quản lý Hạn sử dụng User của Phần mềm Vẽ phả hệ di truyền: Kiểm soát Ngày kích hoạt (<code>Valid_From</code>), Ngày hết hạn (<code>Valid_Until</code> / <code>Access_Expires_At</code>), Phạm vi dữ liệu (<code>Data_Scope</code>) &amp; Phân quyền chi tiết.</p>
           </div>
           <div class="flex flex-wrap gap-2">
-            <a id="admin-link-users-sheet" href="https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit" target="_blank" rel="noopener" class="rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-extrabold text-white hover:bg-emerald-500 transition">
+            <a id="admin-link-users-sheet" href="https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit?gid=0#gid=0" target="_blank" rel="noopener" class="rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-extrabold text-white hover:bg-emerald-500 transition">
               📂 Mở Sheet Allowed_Users ↗
             </a>
             <button id="btn-reset-user-form" type="button" class="rounded-xl bg-amber-400 px-3 py-1.5 text-xs font-black text-slate-950 hover:bg-amber-300 transition">
@@ -2784,17 +2805,17 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
             <div class="rounded-xl border border-slate-200 bg-slate-50 p-3">
               <div class="text-[10px] font-extrabold uppercase text-slate-500">TỔNG SỐ TÀI KHOẢN</div>
-              <div id="kpi-users-total" class="text-xl font-black text-[#06394c] mt-0.5">7</div>
+              <div id="kpi-users-total" class="text-xl font-black text-[#06394c] mt-0.5">9</div>
               <div class="text-[11px] text-slate-500">Đồng bộ Google Sheets</div>
             </div>
             <div class="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3">
               <div class="text-[10px] font-extrabold uppercase text-emerald-800">ĐANG HIỆU LỰC (VALID)</div>
-              <div id="kpi-users-valid" class="text-xl font-black text-emerald-700 mt-0.5">6</div>
+              <div id="kpi-users-valid" class="text-xl font-black text-emerald-700 mt-0.5">8</div>
               <div class="text-[11px] text-emerald-700">Trong hạn Valid_From → Valid_Until</div>
             </div>
             <div class="rounded-xl border border-amber-200 bg-amber-50/60 p-3">
               <div class="text-[10px] font-extrabold uppercase text-amber-800">SẮP HẾT HẠN (≤ 45 NGÀY)</div>
-              <div id="kpi-users-expiring" class="text-xl font-black text-amber-700 mt-0.5">1</div>
+              <div id="kpi-users-expiring" class="text-xl font-black text-amber-700 mt-0.5">4</div>
               <div class="text-[11px] text-amber-700">Cần lưu ý gia hạn</div>
             </div>
             <div class="rounded-xl border border-rose-200 bg-rose-50/60 p-3">
@@ -2949,14 +2970,14 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               <div class="font-extrabold text-slate-900">ThS. Trần Tuấn Anh</div>
               <div class="text-[11px] text-slate-500">Chuyên gia Di truyền &amp; SHPT / Primary Admin</div>
               <div class="font-mono text-[11px] font-bold text-[#0066b3] mt-0.5">anhtran.nihbt@gmail.com</div>
-              <div class="font-mono text-[10px] text-slate-400">MK: TTA@Admin2026 • Login: 2026-11-11 08:00</div>
+              <div class="font-mono text-[10px] text-slate-400">MK: TTA@Admin2026 • Login: 2026-11-18 03:45</div>
             </td>
             <td class="p-3">
               <div class="font-bold text-slate-800">Đơn nguyên Di truyền và Sinh học phân tử</div>
               <span class="mt-1 inline-block rounded bg-sky-100 px-2 py-0.5 font-mono text-[10px] font-black text-[#06394c] border border-sky-300">SCOPE_ALL</span>
             </td>
             <td class="p-3 space-y-1"><span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-700 border border-slate-300">Xem</span> <span class="rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-bold text-[#0066b3] border border-sky-200">Tạo</span> <span class="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-200">Sửa</span> <span class="rounded bg-rose-50 px-1.5 py-0.5 text-[10px] font-bold text-rose-700 border border-rose-200">Xóa</span> <span class="rounded bg-teal-50 px-1.5 py-0.5 text-[10px] font-bold text-teal-800 border border-teal-200">Duyệt XN</span> <span class="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-black text-amber-900 border border-amber-300">Primary Admin</span></td>
-            <td class="p-3"><div class="font-mono font-bold text-emerald-800">2026-01-01 → 2099-12-31</div>
+            <td class="p-3"><div class="font-mono font-bold text-emerald-800">2001-01-01 → 2099-12-31</div>
                      <div class="text-[10px] font-extrabold text-emerald-700">♾ Vĩnh viễn (Primary Admin)</div></td>
             <td class="p-3"><span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-black text-emerald-800 border border-emerald-300">ACTIVE</span></td>
             <td class="p-3 text-right space-y-1">
@@ -2987,8 +3008,8 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               <span class="mt-1 inline-block rounded bg-sky-100 px-2 py-0.5 font-mono text-[10px] font-black text-[#06394c] border border-sky-300">SCOPE_DEPT</span>
             </td>
             <td class="p-3 space-y-1"><span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-700 border border-slate-300">Xem</span> <span class="rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-bold text-[#0066b3] border border-sky-200">Tạo</span> <span class="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-200">Sửa</span> </td>
-            <td class="p-3"><div class="font-mono font-bold text-slate-800">2026-01-01 → 2027-07-01</div>
-                     <div class="text-[10px] font-semibold text-emerald-700">✓ Còn 225 ngày sử dụng</div></td>
+            <td class="p-3"><div class="font-mono font-bold text-amber-700">2026-01-01 → 2026-11-25</div>
+                     <div class="text-[10px] font-bold text-amber-700">⚡ Sắp hết hạn (Còn 7 ngày)</div></td>
             <td class="p-3"><span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-black text-emerald-800 border border-emerald-300">ACTIVE</span></td>
             <td class="p-3 text-right space-y-1">
               <div class="flex flex-wrap justify-end gap-1">
@@ -3025,8 +3046,8 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               <span class="mt-1 inline-block rounded bg-sky-100 px-2 py-0.5 font-mono text-[10px] font-black text-[#06394c] border border-sky-300">SCOPE_DEPT</span>
             </td>
             <td class="p-3 space-y-1"><span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-700 border border-slate-300">Xem</span> <span class="rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-bold text-[#0066b3] border border-sky-200">Tạo</span> <span class="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-200">Sửa</span> </td>
-            <td class="p-3"><div class="font-mono font-bold text-amber-700">2026-01-01 → 2026-12-15</div>
-                     <div class="text-[10px] font-bold text-amber-700">⚡ Sắp hết hạn (Còn 27 ngày)</div></td>
+            <td class="p-3"><div class="font-mono font-bold text-amber-700">2026-01-01 → 2026-11-25</div>
+                     <div class="text-[10px] font-bold text-amber-700">⚡ Sắp hết hạn (Còn 7 ngày)</div></td>
             <td class="p-3"><span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-black text-emerald-800 border border-emerald-300">ACTIVE</span></td>
             <td class="p-3 text-right space-y-1">
               <div class="flex flex-wrap justify-end gap-1">
@@ -3063,8 +3084,8 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               <span class="mt-1 inline-block rounded bg-sky-100 px-2 py-0.5 font-mono text-[10px] font-black text-[#06394c] border border-sky-300">SCOPE_LAB</span>
             </td>
             <td class="p-3 space-y-1"><span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-700 border border-slate-300">Xem</span> <span class="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-200">Sửa</span> <span class="rounded bg-teal-50 px-1.5 py-0.5 text-[10px] font-bold text-teal-800 border border-teal-200">Duyệt XN</span> </td>
-            <td class="p-3"><div class="font-mono font-bold text-slate-800">2026-01-01 → 2028-01-01</div>
-                     <div class="text-[10px] font-semibold text-emerald-700">✓ Còn 409 ngày sử dụng</div></td>
+            <td class="p-3"><div class="font-mono font-bold text-slate-800">2026-01-01 → 2027-05-09</div>
+                     <div class="text-[10px] font-semibold text-emerald-700">✓ Còn 172 ngày sử dụng</div></td>
             <td class="p-3"><span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-black text-emerald-800 border border-emerald-300">ACTIVE</span></td>
             <td class="p-3 text-right space-y-1">
               <div class="flex flex-wrap justify-end gap-1">
@@ -3094,14 +3115,14 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               <div class="font-extrabold text-slate-900">BSNT. Vũ Quang Huy</div>
               <div class="text-[11px] text-slate-500">Bác sĩ Nội trú Nhi khoa</div>
               <div class="font-mono text-[11px] font-bold text-[#0066b3] mt-0.5">bsnt.noitru@nhihanoi.vn</div>
-              <div class="font-mono text-[10px] text-slate-400">MK: NhiHanoi@2026 • Login: 2025-04-30 09:00</div>
+              <div class="font-mono text-[10px] text-slate-400">MK: NhiHanoi@2026 • Login: 2026-11-11 02:32</div>
             </td>
             <td class="p-3">
               <div class="font-bold text-slate-800">Khoa Hồi sức cấp cứu Nhi</div>
               <span class="mt-1 inline-block rounded bg-sky-100 px-2 py-0.5 font-mono text-[10px] font-black text-[#06394c] border border-sky-300">SCOPE_ASSIGNED</span>
             </td>
             <td class="p-3 space-y-1"><span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-700 border border-slate-300">Xem</span> </td>
-            <td class="p-3"><div class="font-mono font-bold text-rose-600">2024-05-01 → 2025-05-01</div>
+            <td class="p-3"><div class="font-mono font-bold text-rose-600">2026-01-01 → 2025-05-01</div>
                      <div class="text-[10px] font-extrabold text-rose-600">⚠ Đã hết hạn (566 ngày)</div></td>
             <td class="p-3"><span class="rounded-full bg-rose-100 px-2.5 py-0.5 text-[10px] font-black text-rose-800 border border-rose-300">EXPIRED</span></td>
             <td class="p-3 text-right space-y-1">
@@ -3132,15 +3153,15 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               <div class="font-extrabold text-slate-900">TS.BS. Nguyễn Quang Hào</div>
               <div class="text-[11px] text-slate-500">Bác sĩ Chuyên khoa Huyết học</div>
               <div class="font-mono text-[11px] font-bold text-[#0066b3] mt-0.5">haonguyenquang123@gmail.com</div>
-              <div class="font-mono text-[10px] text-slate-400">MK: NhiHanoi@2026 • Login: 2026-11-09 17:30</div>
+              <div class="font-mono text-[10px] text-slate-400">MK: NhiHanoi@2026 • Login: 2026-11-11 06:42</div>
             </td>
             <td class="p-3">
               <div class="font-bold text-slate-800">Bệnh viện Trung ương Thái Nguyên</div>
               <span class="mt-1 inline-block rounded bg-sky-100 px-2 py-0.5 font-mono text-[10px] font-black text-[#06394c] border border-sky-300">SCOPE_DEPT</span>
             </td>
             <td class="p-3 space-y-1"><span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-700 border border-slate-300">Xem</span> <span class="rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-bold text-[#0066b3] border border-sky-200">Tạo</span> <span class="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-200">Sửa</span> </td>
-            <td class="p-3"><div class="font-mono font-bold text-slate-800">2026-01-01 → 2027-07-01</div>
-                     <div class="text-[10px] font-semibold text-emerald-700">✓ Còn 225 ngày sử dụng</div></td>
+            <td class="p-3"><div class="font-mono font-bold text-amber-700">2026-01-01 → 2026-11-25</div>
+                     <div class="text-[10px] font-bold text-amber-700">⚡ Sắp hết hạn (Còn 7 ngày)</div></td>
             <td class="p-3"><span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-black text-emerald-800 border border-emerald-300">ACTIVE</span></td>
             <td class="p-3 text-right space-y-1">
               <div class="flex flex-wrap justify-end gap-1">
@@ -3168,17 +3189,17 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           <tr class="hover:bg-slate-50/80">
             <td class="p-3">
               <div class="font-extrabold text-slate-900">ThS. Nguyễn Thùy Trang</div>
-              <div class="text-[11px] text-slate-500">Chuyên viên Di truyền &amp; SHPT</div>
+              <div class="text-[11px] text-slate-500">Chuyên gia Di truyền &amp; SHPT</div>
               <div class="font-mono text-[11px] font-bold text-[#0066b3] mt-0.5">thuytrang.nihbt@gmail.com</div>
-              <div class="font-mono text-[10px] text-slate-400">MK: NhiHanoi@2026 • Login: 2026-11-09 17:30</div>
+              <div class="font-mono text-[10px] text-slate-400">MK: NhiHanoi@2026 • Login: 2026-11-18 03:02</div>
             </td>
             <td class="p-3">
-              <div class="font-bold text-slate-800">Đơn nguyên Di truyền và Sinh học phân tử</div>
+              <div class="font-bold text-slate-800">Viện Huyết học - Truyền máu Trung ương</div>
               <span class="mt-1 inline-block rounded bg-sky-100 px-2 py-0.5 font-mono text-[10px] font-black text-[#06394c] border border-sky-300">SCOPE_DEPT</span>
             </td>
-            <td class="p-3 space-y-1"><span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-700 border border-slate-300">Xem</span> <span class="rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-bold text-[#0066b3] border border-sky-200">Tạo</span> <span class="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-200">Sửa</span> <span class="rounded bg-teal-50 px-1.5 py-0.5 text-[10px] font-bold text-teal-800 border border-teal-200">Duyệt XN</span> </td>
-            <td class="p-3"><div class="font-mono font-bold text-slate-800">2026-01-01 → 2027-12-31</div>
-                     <div class="text-[10px] font-semibold text-emerald-700">✓ Còn 408 ngày sử dụng</div></td>
+            <td class="p-3 space-y-1"><span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-700 border border-slate-300">Xem</span> <span class="rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-bold text-[#0066b3] border border-sky-200">Tạo</span> <span class="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-200">Sửa</span> </td>
+            <td class="p-3"><div class="font-mono font-bold text-amber-700">2026-01-01 → 2026-11-25</div>
+                     <div class="text-[10px] font-bold text-amber-700">⚡ Sắp hết hạn (Còn 7 ngày)</div></td>
             <td class="p-3"><span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-black text-emerald-800 border border-emerald-300">ACTIVE</span></td>
             <td class="p-3 text-right space-y-1">
               <div class="flex flex-wrap justify-end gap-1">
@@ -3197,6 +3218,82 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                        🔒 Khóa
                      </button>
                      <button type="button" data-user-idx="6" class="btn-delete-user rounded-lg bg-rose-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-rose-700">
+                       🗑 Thu hồi
+                     </button>
+                   </div>
+            </td>
+          </tr>
+        
+          <tr class="hover:bg-slate-50/80">
+            <td class="p-3">
+              <div class="font-extrabold text-slate-900">ThS. Nguyễn Thị Thu Hường</div>
+              <div class="text-[11px] text-slate-500">Trưởng nhóm Sinh học phân tử</div>
+              <div class="font-mono text-[11px] font-bold text-[#0066b3] mt-0.5">huong90.nihbt@gmail.com</div>
+              <div class="font-mono text-[10px] text-slate-400">MK: NhiHanoi@2026 • Login: 2026-11-11 06:42</div>
+            </td>
+            <td class="p-3">
+              <div class="font-bold text-slate-800">Bệnh viện Phụ sản Hà Nội</div>
+              <span class="mt-1 inline-block rounded bg-sky-100 px-2 py-0.5 font-mono text-[10px] font-black text-[#06394c] border border-sky-300">SCOPE_DEPT</span>
+            </td>
+            <td class="p-3 space-y-1"><span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-700 border border-slate-300">Xem</span> <span class="rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-bold text-[#0066b3] border border-sky-200">Tạo</span> <span class="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-200">Sửa</span> </td>
+            <td class="p-3"><div class="font-mono font-bold text-slate-800">2026-01-01 → 2027-05-09</div>
+                     <div class="text-[10px] font-semibold text-emerald-700">✓ Còn 172 ngày sử dụng</div></td>
+            <td class="p-3"><span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-black text-emerald-800 border border-emerald-300">ACTIVE</span></td>
+            <td class="p-3 text-right space-y-1">
+              <div class="flex flex-wrap justify-end gap-1">
+                <button type="button" data-user-idx="7" class="btn-edit-user rounded-lg bg-amber-500 px-2.5 py-1 text-[11px] font-extrabold text-white hover:bg-amber-600">
+                  ✎ Sửa / Hạn SD
+                </button>
+                <button type="button" data-user-idx="7" data-add-m="6" class="btn-extend-months rounded-lg bg-teal-700 px-2 py-1 text-[11px] font-extrabold text-white hover:bg-teal-800">
+                  +6T
+                </button>
+                <button type="button" data-user-idx="7" data-add-m="12" class="btn-extend-months rounded-lg bg-[#0066b3] px-2 py-1 text-[11px] font-extrabold text-white hover:bg-[#06394c]">
+                  +1 Năm
+                </button>
+              </div>
+              <div class="flex flex-wrap justify-end gap-1 pt-1">
+                     <button type="button" data-user-idx="7" class="btn-toggle-lock rounded-lg bg-slate-800 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-slate-700">
+                       🔒 Khóa
+                     </button>
+                     <button type="button" data-user-idx="7" class="btn-delete-user rounded-lg bg-rose-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-rose-700">
+                       🗑 Thu hồi
+                     </button>
+                   </div>
+            </td>
+          </tr>
+        
+          <tr class="hover:bg-slate-50/80">
+            <td class="p-3">
+              <div class="font-extrabold text-slate-900">PGS.TS Bùi Thị Thu Hương</div>
+              <div class="text-[11px] text-slate-500">Bác sĩ Chuyên khoa</div>
+              <div class="font-mono text-[11px] font-bold text-[#0066b3] mt-0.5">huongbui979@gmail.com</div>
+              <div class="font-mono text-[10px] text-slate-400">MK: TWTN@2026 • Login: 2026-11-11 09:16</div>
+            </td>
+            <td class="p-3">
+              <div class="font-bold text-slate-800">Bệnh viện Trung ương Thái Nguyên</div>
+              <span class="mt-1 inline-block rounded bg-sky-100 px-2 py-0.5 font-mono text-[10px] font-black text-[#06394c] border border-sky-300">SCOPE_DEPT</span>
+            </td>
+            <td class="p-3 space-y-1"><span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-700 border border-slate-300">Xem</span> <span class="rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-bold text-[#0066b3] border border-sky-200">Tạo</span> <span class="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-200">Sửa</span> </td>
+            <td class="p-3"><div class="font-mono font-bold text-rose-600">2026-01-01 → 2027-05-10</div>
+                     <div class="text-[10px] font-extrabold text-rose-600">⚠ Đã hết hạn (173 ngày)</div></td>
+            <td class="p-3"><span class="rounded-full bg-rose-100 px-2.5 py-0.5 text-[10px] font-black text-rose-800 border border-rose-300">EXPIRED</span></td>
+            <td class="p-3 text-right space-y-1">
+              <div class="flex flex-wrap justify-end gap-1">
+                <button type="button" data-user-idx="8" class="btn-edit-user rounded-lg bg-amber-500 px-2.5 py-1 text-[11px] font-extrabold text-white hover:bg-amber-600">
+                  ✎ Sửa / Hạn SD
+                </button>
+                <button type="button" data-user-idx="8" data-add-m="6" class="btn-extend-months rounded-lg bg-teal-700 px-2 py-1 text-[11px] font-extrabold text-white hover:bg-teal-800">
+                  +6T
+                </button>
+                <button type="button" data-user-idx="8" data-add-m="12" class="btn-extend-months rounded-lg bg-[#0066b3] px-2 py-1 text-[11px] font-extrabold text-white hover:bg-[#06394c]">
+                  +1 Năm
+                </button>
+              </div>
+              <div class="flex flex-wrap justify-end gap-1 pt-1">
+                     <button type="button" data-user-idx="8" class="btn-toggle-lock rounded-lg bg-slate-800 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-slate-700">
+                       🔒 Khóa
+                     </button>
+                     <button type="button" data-user-idx="8" class="btn-delete-user rounded-lg bg-rose-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-rose-700">
                        🗑 Thu hồi
                      </button>
                    </div>
@@ -3227,6 +3324,39 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               </tr>
             </thead>
             <tbody id="tbody-audit-logs" class="divide-y divide-slate-100 font-mono text-[11px]">
+        <tr class="hover:bg-slate-50">
+          <td class="p-2.5 text-slate-500">11:36:07 2026-11-18</td>
+          <td class="p-2.5 font-bold text-[#06394c]">anhtran.nihbt@gmail.com</td>
+          <td class="p-2.5 font-bold text-slate-800">SAVE_ENDPOINT_AND_DB_LINK</td>
+          <td class="p-2.5 text-slate-700">https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit?gid=0#gid=0</td>
+          <td class="p-2.5">
+            <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800">SUCCESS</span>
+          </td>
+          <td class="p-2.5 text-emerald-700 font-mono">66710799d2ecb752</td>
+        </tr>
+      
+        <tr class="hover:bg-slate-50">
+          <td class="p-2.5 text-slate-500">11:34:07 2026-11-18</td>
+          <td class="p-2.5 font-bold text-[#06394c]">anhtran.nihbt@gmail.com</td>
+          <td class="p-2.5 font-bold text-slate-800">SAVE_ENDPOINT_AND_DB_LINK</td>
+          <td class="p-2.5 text-slate-700">https://docs.google.com/spreadsheets/d/1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg/edit</td>
+          <td class="p-2.5">
+            <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800">SUCCESS</span>
+          </td>
+          <td class="p-2.5 text-emerald-700 font-mono">fe1b308bf0303336</td>
+        </tr>
+      
+        <tr class="hover:bg-slate-50">
+          <td class="p-2.5 text-slate-500">11:30:24 2026-11-18</td>
+          <td class="p-2.5 font-bold text-[#06394c]">anhtran.nihbt@gmail.com</td>
+          <td class="p-2.5 font-bold text-slate-800">EXPORT_GITHUB_INDEX_HTML_ZERO_TRUST</td>
+          <td class="p-2.5 text-slate-700">https://script.google.com/macros/s/AKfycbyvEjMvIsyzDt1KsX9x05te3QnCOLUDbD9mJOK9IRtkgd2xdcQBR_1dtg3flzLUbqWnJQ/exec</td>
+          <td class="p-2.5">
+            <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800">SUCCESS</span>
+          </td>
+          <td class="p-2.5 text-emerald-700 font-mono">b3aa343f2b6ec1bb</td>
+        </tr>
+      
         <tr class="hover:bg-slate-50">
           <td class="p-2.5 text-slate-500">11:30:02 2026-11-18</td>
           <td class="p-2.5 font-bold text-[#06394c]">anhtran.nihbt@gmail.com</td>
@@ -3273,7 +3403,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
     // =========================================================================
     // 0. DEFAULT GOOGLE APPS SCRIPT API ENDPOINT & GOOGLE SHEETS URL
     // =========================================================================
-    const DEFAULT_GAS_API_URL = 'https://script.google.com/macros/s/AKfycbyvEjMvIsyzDt1KsX9x05te3QnCOLUDbD9mJOK9IRtkgd2xdcQBR_1dtg3flzLUbqWnJQ/exec';
+    const DEFAULT_GAS_API_URL = 'https://script.google.com/macros/s/AKfycbyFs5QA5SY-6kEnx-ob-bmwyOxLLuyLZiukzJlwMNj8Hea0pbZE_kjjZuIECrKklRUWcg/exec';
     const MAIN_DB_SPREADSHEET_ID = '1zXPJeJ58bJV72RAVWSCHCzdyxhFHrWPIe_gZ0bUYelg';
     const PEDIGREE_DB_SPREADSHEET_ID = '1AfSU8iW4mR0sK8-ld6Vv8PZmCbwqCebAonfjmOvlNvo';
     const GAS_SCRIPT_PROJECT_URL = 'https://script.google.com/d/1GjjsVwy8r4WgAjhgJmmuqAWCDf3tCdZmIIhvFrH239rXFaBiJEsyvU7v/edit';
@@ -3295,17 +3425,13 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
     // =========================================================================
     const ALLOWED_USERS_DB = [
   {
+    "rowIndex": 2,
     "Email": "anhtran.nihbt@gmail.com",
     "Password": "TTA@Admin2026",
     "Full_Name": "ThS. Trần Tuấn Anh",
     "Title_Role": "Chuyên gia Di truyền & SHPT / Primary Admin",
     "Department": "Đơn nguyên Di truyền và Sinh học phân tử",
     "Data_Scope": "SCOPE_ALL",
-    "Valid_From": "2026-01-01",
-    "Valid_Until": "2099-12-31",
-    "Access_Expires_At": "2099-12-31",
-    "Status": "ACTIVE",
-    "Last_Login": "2026-11-18T04:30:02.041Z",
     "Permissions": {
       "can_view": true,
       "can_create": true,
@@ -3314,20 +3440,33 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       "can_validate_lab": true,
       "can_view_admin_tab": true
     },
-    "Updated_At": ""
+    "Valid_From": "2001-01-01",
+    "Valid_Until": "2099-12-31",
+    "Access_Expires_At": "2099-12-31",
+    "Status": "ACTIVE",
+    "Last_Login": "2026-11-18T03:45:23.021Z",
+    "Updated_At": "2026-11-11T07:33:18.772Z",
+    "email": "anhtran.nihbt@gmail.com",
+    "password": "TTA@Admin2026",
+    "name": "ThS. Trần Tuấn Anh",
+    "role": "admin",
+    "department": "Đơn nguyên Di truyền và Sinh học phân tử",
+    "status": "active",
+    "validFrom": "2001-01-01",
+    "validUntil": "2099-12-31",
+    "lastLogin": "2026-11-18T03:45:23.021Z",
+    "updatedAt": "2026-11-11T07:33:18.772Z",
+    "daysRemaining": 99999,
+    "licenseValid": true
   },
   {
+    "rowIndex": 3,
     "Email": "bs.huyethoc@nhihanoi.vn",
     "Password": "NhiHanoi@2026",
     "Full_Name": "BSCKII. Nguyễn Minh Đức",
     "Title_Role": "Trưởng khoa Huyết học Lâm sàng",
     "Department": "Khoa Huyết học - Truyền máu",
     "Data_Scope": "SCOPE_DEPT",
-    "Valid_From": "2026-01-01",
-    "Valid_Until": "2027-07-01",
-    "Access_Expires_At": "2027-07-01",
-    "Status": "ACTIVE",
-    "Last_Login": "2026-11-09T17:30:00Z",
     "Permissions": {
       "can_view": true,
       "can_create": true,
@@ -3336,20 +3475,33 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       "can_validate_lab": false,
       "can_view_admin_tab": false
     },
-    "Updated_At": ""
+    "Valid_From": "2026-01-01",
+    "Valid_Until": "2026-11-25",
+    "Access_Expires_At": "2026-11-25",
+    "Status": "ACTIVE",
+    "Last_Login": "2026-11-09T17:30:00Z",
+    "Updated_At": "2026-11-09T17:30:00Z",
+    "email": "bs.huyethoc@nhihanoi.vn",
+    "password": "NhiHanoi@2026",
+    "name": "BSCKII. Nguyễn Minh Đức",
+    "role": "counselor",
+    "department": "Khoa Huyết học - Truyền máu",
+    "status": "active",
+    "validFrom": "2026-01-01",
+    "validUntil": "2026-11-25",
+    "lastLogin": "2026-11-09T17:30:00Z",
+    "updatedAt": "2026-11-09T17:30:00Z",
+    "daysRemaining": 7,
+    "licenseValid": true
   },
   {
+    "rowIndex": 4,
     "Email": "bs.sankhoa@nhihanoi.vn",
     "Password": "NhiHanoi@2026",
     "Full_Name": "ThS.BS. Lê Thu Hà",
     "Title_Role": "Bác sĩ Chuyên khoa Sàng lọc Trước sinh",
     "Department": "Trung tâm Sàng lọc Trước sinh & Sơ sinh",
     "Data_Scope": "SCOPE_DEPT",
-    "Valid_From": "2026-01-01",
-    "Valid_Until": "2026-12-15",
-    "Access_Expires_At": "2026-12-15",
-    "Status": "ACTIVE",
-    "Last_Login": "2026-11-09T17:45:00Z",
     "Permissions": {
       "can_view": true,
       "can_create": true,
@@ -3358,20 +3510,33 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       "can_validate_lab": false,
       "can_view_admin_tab": false
     },
-    "Updated_At": ""
+    "Valid_From": "2026-01-01",
+    "Valid_Until": "2026-11-25",
+    "Access_Expires_At": "2026-11-25",
+    "Status": "ACTIVE",
+    "Last_Login": "2026-11-09T17:45:00Z",
+    "Updated_At": "2026-11-09T17:45:00Z",
+    "email": "bs.sankhoa@nhihanoi.vn",
+    "password": "NhiHanoi@2026",
+    "name": "ThS.BS. Lê Thu Hà",
+    "role": "counselor",
+    "department": "Trung tâm Sàng lọc Trước sinh & Sơ sinh",
+    "status": "active",
+    "validFrom": "2026-01-01",
+    "validUntil": "2026-11-25",
+    "lastLogin": "2026-11-09T17:45:00Z",
+    "updatedAt": "2026-11-09T17:45:00Z",
+    "daysRemaining": 7,
+    "licenseValid": true
   },
   {
+    "rowIndex": 5,
     "Email": "lab.shpt@nhihanoi.vn",
     "Password": "NhiHanoi@2026",
     "Full_Name": "CNXN. Phạm Hoàng Nam",
     "Title_Role": "Kỹ thuật viên Trưởng Sinh học phân tử",
     "Department": "Đơn nguyên Di truyền và Sinh học phân tử",
     "Data_Scope": "SCOPE_LAB",
-    "Valid_From": "2026-01-01",
-    "Valid_Until": "2028-01-01",
-    "Access_Expires_At": "2028-01-01",
-    "Status": "ACTIVE",
-    "Last_Login": "2026-11-09T17:50:00Z",
     "Permissions": {
       "can_view": true,
       "can_create": false,
@@ -3380,20 +3545,33 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       "can_validate_lab": true,
       "can_view_admin_tab": false
     },
-    "Updated_At": ""
+    "Valid_From": "2026-01-01",
+    "Valid_Until": "2027-05-09",
+    "Access_Expires_At": "2027-05-09",
+    "Status": "ACTIVE",
+    "Last_Login": "2026-11-09T17:50:00Z",
+    "Updated_At": "2026-11-09T17:50:00Z",
+    "email": "lab.shpt@nhihanoi.vn",
+    "password": "NhiHanoi@2026",
+    "name": "CNXN. Phạm Hoàng Nam",
+    "role": "counselor",
+    "department": "Đơn nguyên Di truyền và Sinh học phân tử",
+    "status": "active",
+    "validFrom": "2026-01-01",
+    "validUntil": "2027-05-09",
+    "lastLogin": "2026-11-09T17:50:00Z",
+    "updatedAt": "2026-11-09T17:50:00Z",
+    "daysRemaining": 172,
+    "licenseValid": true
   },
   {
+    "rowIndex": 6,
     "Email": "bsnt.noitru@nhihanoi.vn",
     "Password": "NhiHanoi@2026",
     "Full_Name": "BSNT. Vũ Quang Huy",
     "Title_Role": "Bác sĩ Nội trú Nhi khoa",
     "Department": "Khoa Hồi sức cấp cứu Nhi",
     "Data_Scope": "SCOPE_ASSIGNED",
-    "Valid_From": "2024-05-01",
-    "Valid_Until": "2025-05-01",
-    "Access_Expires_At": "2025-05-01",
-    "Status": "EXPIRED",
-    "Last_Login": "2025-04-30T09:00:00Z",
     "Permissions": {
       "can_view": true,
       "can_create": false,
@@ -3402,20 +3580,33 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       "can_validate_lab": false,
       "can_view_admin_tab": false
     },
-    "Updated_At": ""
+    "Valid_From": "2026-01-01",
+    "Valid_Until": "2025-05-01",
+    "Access_Expires_At": "2025-05-01",
+    "Status": "EXPIRED",
+    "Last_Login": "2026-11-11T02:32:29.447Z",
+    "Updated_At": "2026-11-11T02:32:29.447Z",
+    "email": "bsnt.noitru@nhihanoi.vn",
+    "password": "NhiHanoi@2026",
+    "name": "BSNT. Vũ Quang Huy",
+    "role": "counselor",
+    "department": "Khoa Hồi sức cấp cứu Nhi",
+    "status": "expired",
+    "validFrom": "2026-01-01",
+    "validUntil": "2025-05-01",
+    "lastLogin": "2026-11-11T02:32:29.447Z",
+    "updatedAt": "2026-11-11T02:32:29.447Z",
+    "daysRemaining": -566,
+    "licenseValid": false
   },
   {
+    "rowIndex": 7,
     "Email": "haonguyenquang123@gmail.com",
     "Password": "NhiHanoi@2026",
     "Full_Name": "TS.BS. Nguyễn Quang Hào",
     "Title_Role": "Bác sĩ Chuyên khoa Huyết học",
     "Department": "Bệnh viện Trung ương Thái Nguyên",
     "Data_Scope": "SCOPE_DEPT",
-    "Valid_From": "2026-01-01",
-    "Valid_Until": "2027-07-01",
-    "Access_Expires_At": "2027-07-01",
-    "Status": "ACTIVE",
-    "Last_Login": "2026-11-09T17:30:00Z",
     "Permissions": {
       "can_view": true,
       "can_create": true,
@@ -3424,29 +3615,129 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       "can_validate_lab": false,
       "can_view_admin_tab": false
     },
-    "Updated_At": ""
+    "Valid_From": "2026-01-01",
+    "Valid_Until": "2026-11-25",
+    "Access_Expires_At": "2026-11-25",
+    "Status": "ACTIVE",
+    "Last_Login": "2026-11-11T06:42:38.476Z",
+    "Updated_At": "2026-11-11T06:42:38.476Z",
+    "email": "haonguyenquang123@gmail.com",
+    "password": "NhiHanoi@2026",
+    "name": "TS.BS. Nguyễn Quang Hào",
+    "role": "counselor",
+    "department": "Bệnh viện Trung ương Thái Nguyên",
+    "status": "active",
+    "validFrom": "2026-01-01",
+    "validUntil": "2026-11-25",
+    "lastLogin": "2026-11-11T06:42:38.476Z",
+    "updatedAt": "2026-11-11T06:42:38.476Z",
+    "daysRemaining": 7,
+    "licenseValid": true
   },
   {
+    "rowIndex": 8,
     "Email": "thuytrang.nihbt@gmail.com",
     "Password": "NhiHanoi@2026",
     "Full_Name": "ThS. Nguyễn Thùy Trang",
-    "Title_Role": "Chuyên viên Di truyền & SHPT",
-    "Department": "Đơn nguyên Di truyền và Sinh học phân tử",
+    "Title_Role": "Chuyên gia Di truyền & SHPT",
+    "Department": "Viện Huyết học - Truyền máu Trung ương",
     "Data_Scope": "SCOPE_DEPT",
-    "Valid_From": "2026-01-01",
-    "Valid_Until": "2027-12-31",
-    "Access_Expires_At": "2027-12-31",
-    "Status": "ACTIVE",
-    "Last_Login": "2026-11-09T17:30:00Z",
     "Permissions": {
       "can_view": true,
       "can_create": true,
       "can_edit": true,
       "can_delete": false,
-      "can_validate_lab": true,
+      "can_validate_lab": false,
       "can_view_admin_tab": false
     },
-    "Updated_At": ""
+    "Valid_From": "2026-01-01",
+    "Valid_Until": "2026-11-25",
+    "Access_Expires_At": "2026-11-25",
+    "Status": "ACTIVE",
+    "Last_Login": "2026-11-18T03:02:33.195Z",
+    "Updated_At": "2026-11-11T06:48:25.237Z",
+    "email": "thuytrang.nihbt@gmail.com",
+    "password": "NhiHanoi@2026",
+    "name": "ThS. Nguyễn Thùy Trang",
+    "role": "counselor",
+    "department": "Viện Huyết học - Truyền máu Trung ương",
+    "status": "active",
+    "validFrom": "2026-01-01",
+    "validUntil": "2026-11-25",
+    "lastLogin": "2026-11-18T03:02:33.195Z",
+    "updatedAt": "2026-11-11T06:48:25.237Z",
+    "daysRemaining": 7,
+    "licenseValid": true
+  },
+  {
+    "rowIndex": 9,
+    "Email": "huong90.nihbt@gmail.com",
+    "Password": "NhiHanoi@2026",
+    "Full_Name": "ThS. Nguyễn Thị Thu Hường",
+    "Title_Role": "Trưởng nhóm Sinh học phân tử",
+    "Department": "Bệnh viện Phụ sản Hà Nội",
+    "Data_Scope": "SCOPE_DEPT",
+    "Permissions": {
+      "can_view": true,
+      "can_create": true,
+      "can_edit": true,
+      "can_delete": false,
+      "can_validate_lab": false,
+      "can_view_admin_tab": false
+    },
+    "Valid_From": "2026-01-01",
+    "Valid_Until": "2027-05-09",
+    "Access_Expires_At": "2027-05-09",
+    "Status": "ACTIVE",
+    "Last_Login": "2026-11-11T06:42:47.182Z",
+    "Updated_At": "2026-11-11T06:42:47.182Z",
+    "email": "huong90.nihbt@gmail.com",
+    "password": "NhiHanoi@2026",
+    "name": "ThS. Nguyễn Thị Thu Hường",
+    "role": "counselor",
+    "department": "Bệnh viện Phụ sản Hà Nội",
+    "status": "active",
+    "validFrom": "2026-01-01",
+    "validUntil": "2027-05-09",
+    "lastLogin": "2026-11-11T06:42:47.182Z",
+    "updatedAt": "2026-11-11T06:42:47.182Z",
+    "daysRemaining": 172,
+    "licenseValid": true
+  },
+  {
+    "rowIndex": 10,
+    "Email": "huongbui979@gmail.com",
+    "Password": "TWTN@2026",
+    "Full_Name": "PGS.TS Bùi Thị Thu Hương",
+    "Title_Role": "Bác sĩ Chuyên khoa",
+    "Department": "Bệnh viện Trung ương Thái Nguyên",
+    "Data_Scope": "SCOPE_DEPT",
+    "Permissions": {
+      "can_view": true,
+      "can_create": true,
+      "can_edit": true,
+      "can_delete": false,
+      "can_validate_lab": false,
+      "can_view_admin_tab": false
+    },
+    "Valid_From": "2026-01-01",
+    "Valid_Until": "2027-05-10",
+    "Access_Expires_At": "2027-05-10",
+    "Status": "EXPIRED",
+    "Last_Login": "2026-11-11T09:16:47.245Z",
+    "Updated_At": "2026-11-11T07:08:47.404Z",
+    "email": "huongbui979@gmail.com",
+    "password": "TWTN@2026",
+    "name": "PGS.TS Bùi Thị Thu Hương",
+    "role": "counselor",
+    "department": "Bệnh viện Trung ương Thái Nguyên",
+    "status": "expired",
+    "validFrom": "2026-01-01",
+    "validUntil": "2027-05-10",
+    "lastLogin": "2026-11-11T09:16:47.245Z",
+    "updatedAt": "2026-11-11T07:08:47.404Z",
+    "daysRemaining": 173,
+    "licenseValid": true
   }
 ];
 
